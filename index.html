@@ -1,0 +1,2110 @@
+<!doctype html>
+<html lang="es" data-estatico>
+<head>
+<meta charset="utf-8">
+<meta name="radar-version" content="b09875f6af26">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radar de Licitaciones</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#000775">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; base-uri 'none'; form-action 'none'">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Paleta tomada de electroriente.com.co: azul marino, texto casi negro, fondo blanco */
+  --bg: #FFFFFF; --surface: #F6F7FB; --muted: #EEF0F7; --border: #D9DDEA; --hair: #E6E9F2;
+  --text: #212529; --text-2: #5B6272;
+  --primary: #011E91; --on-primary: #FFFFFF; --primary-soft: #E7EBFB;
+  --accent: #8A5200; --accent-soft: #FDF1D8;
+  --danger: #A12B2B; --danger-soft: #FBE8E6;
+  --ring: #011E91; --barra: #000775;
+  --border-ctl: #7A839A;   /* borde de campos y botones: 3,5:1 sobre blanco (las lineas decorativas siguen con --border) */
+  --serif: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 12px; --t: 200ms; --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--alto-barra, 0px) + var(--alto-tabs, 0px) + 12px); color-scheme: light; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+button, a, summary, label.chk, select { touch-action: manipulation; }
+button, .tab, .seg button, label.chk { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+body { margin: 0; font: 400 16px/1.6 var(--sans); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1600px; margin: 0 auto; padding: 8px max(clamp(20px, 4vw, 56px), env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(clamp(20px, 4vw, 56px), env(safe-area-inset-left)); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 6px; }
+.skip { position: absolute; left: -999px; top: 8px; background: var(--primary); color: var(--on-primary); padding: 8px 12px; border-radius: 6px; z-index: 10; }
+.skip:focus { left: 8px; }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+.barra { background: var(--barra); color: #fff; position: sticky; top: 0; z-index: 30; }
+/* Al bajar, el encabezado se condensa para no quitar pantalla: sin la linea de ultima consulta y con el logo mas chico. */
+.barra.compacta .sub { display: none; }
+.barra.compacta .logo { height: 30px; }
+.barra.compacta .barra-in { padding-top: max(8px, env(safe-area-inset-top)); padding-bottom: 8px; row-gap: 8px; }
+.barra.compacta h1 { font-size: 1.125rem; }
+.barra-in { max-width: 1600px; margin: 0 auto; padding: max(12px, env(safe-area-inset-top)) max(clamp(20px, 4vw, 56px), env(safe-area-inset-right)) 12px max(clamp(20px, 4vw, 56px), env(safe-area-inset-left)); display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center; justify-content: space-between; }
+.marca { display: flex; align-items: center; gap: 20px; }
+.logo { height: 46px; width: auto; display: block; }
+.titulo { border-left: 1px solid rgba(255,255,255,.3); padding-left: 20px; }
+h1 { margin: 0; font: 600 1.375rem/1.15 var(--sans); letter-spacing: -.015em; }
+.sub { color: rgba(255,255,255,.74); font-size: .8125rem; margin: 4px 0 0; }
+.barra label.f { color: rgba(255,255,255,.76); }
+.barra select { background-color: rgba(255,255,255,.1); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); color: #fff; border-color: rgba(255,255,255,.3); border-radius: 999px; padding-left: 18px; }
+.barra select option { color: #212529; background: #fff; }
+.barra button.btn { background: #fff; color: var(--barra); border-color: #fff; }
+.barra :focus-visible { outline-color: #fff; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+label.f { display: flex; flex-direction: column; font-size: .6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-2); gap: 4px; }
+select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 38px; background-repeat: no-repeat; background-position: right 14px center; background-size: 12px 8px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23495057' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); }
+select, input[type=search], input[type=number] { font: 400 1rem var(--sans); min-height: 44px; padding-top: 0; padding-bottom: 0; padding-left: 12px; background-color: var(--surface); color: var(--text); border: 1px solid var(--border-ctl); border-radius: 8px; transition: border-color var(--t); }
+input[type=search], input[type=number] { padding-right: 12px; }
+label.buscar { flex: 1 1 280px; }
+label.buscar input { width: 100%; box-sizing: border-box; }
+input[type=number] { width: 96px; }
+.subir input[type=date] { font-size: 1rem; }
+.chk { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border: 1px solid var(--border-ctl); border-radius: 8px; background: var(--surface); cursor: pointer; font-size: .9375rem; user-select: none; transition: border-color var(--t); }
+.chk input { width: 17px; height: 17px; accent-color: var(--primary); cursor: pointer; }
+button.btn { transition: transform 120ms var(--ease-out), filter var(--t); font: 600 .9375rem var(--sans); min-height: 44px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--primary); background: var(--primary); color: var(--on-primary); display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+button.btn:disabled { opacity: .5; cursor: not-allowed; }
+button.btn:active, label.chk:active, button.link:active { transform: scale(0.97); }
+button.btn.ghost { background: transparent; color: var(--primary); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin: 0 0 20px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.kpi { display: flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; padding: 12px 20px 12px 0; }
+.kpi + .kpi { padding-left: 20px; border-left: 1px solid var(--hair); }
+.kpi b { font: 600 1.75rem/1 var(--serif); letter-spacing: -.03em; color: var(--primary); }
+.kpi span { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-2); }
+
+.banner { border: 1px solid var(--hair); background: var(--surface); border-radius: var(--r); padding: 4px 8px 4px 16px; margin-bottom: 16px; }
+.banner.warn { background: var(--danger-soft); border-color: transparent; padding-top: 10px; padding-bottom: 10px; }
+.banner > .row { display: flex; gap: 4px 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; min-height: 40px; }
+.banner strong { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-weight: 500; font-size: .875rem; color: var(--text-2); }
+.banner strong svg { color: var(--accent); width: 16px; height: 16px; }
+.banner.warn strong { color: var(--danger); font-weight: 600; }
+.banner ul { margin: 2px 0 10px; padding-left: 20px; font-size: .875rem; color: var(--text); }
+.banner li + li { margin-top: 4px; }
+.banner[hidden] { display: none; }
+
+.count { color: var(--text-2); font-size: .8125rem; letter-spacing: .02em; margin: 0; }
+.decide-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; margin: 20px 0 4px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); padding: 3px; gap: 2px; }
+.seg button { font: 500 .875rem var(--sans); min-height: 38px; padding: 0 14px; border: 0; border-radius: 999px; background: none; color: var(--text-2); cursor: pointer; display: inline-flex; gap: 8px; align-items: center; transition: background var(--t), color var(--t); }
+.seg button b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.seg button[aria-pressed=true] { background: var(--primary-soft); color: var(--primary); }
+.der { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+.ord { display: inline-flex; align-items: center; gap: 8px; font-size: .875rem; color: var(--text-2); }
+.ord select { min-height: 38px; padding-left: 12px; font-size: .9375rem; }
+.cabeza { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 4px 24px; margin-bottom: 4px; }
+.cabeza h2 { flex: 1 1 280px; margin: 0; }
+.valor { text-align: right; flex: none; }
+.valor strong { display: block; font: 600 1.125rem/1.3 var(--sans); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.valor strong.nulo { font-weight: 500; font-size: .9375rem; color: var(--text-2); }
+.valor small { display: block; color: var(--text-2); font-size: .8125rem; }
+.valor small.cierre { margin-top: 2px; font-weight: 600; color: var(--text); }
+.valor small.cierre.nd { font-weight: 400; color: var(--text-2); }
+.valor small.cierre.pronto { color: var(--danger); }
+.valor small.resp { margin-top: 2px; font-weight: 600; color: var(--text); }
+.valor small.resp.cero { font-weight: 400; color: var(--text-2); }
+.top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 14px 0 4px; }
+.acciones .sp { flex: 1; }
+button.dec { font: 600 .875rem var(--sans); min-height: 40px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; transition: transform 120ms var(--ease-out), border-color var(--t), background var(--t); }
+button.dec:active { transform: scale(0.97); }
+button.dec.si[aria-pressed=true] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+button.dec.no[aria-pressed=true] { background: var(--muted); }
+.card.descartada h2, .card.descartada .desc, .card.descartada .score b { color: var(--text-2); }
+.card.descartada .bar i { background: var(--text-2); }
+.hecho { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; padding: 12px 0; border-bottom: 1px solid var(--hair); color: var(--text-2); font-size: .9375rem; list-style: none; }
+.hecho strong { color: var(--text); font-weight: 600; overflow-wrap: anywhere; }
+.desc.corto { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
+button.link.mini { min-height: 32px; padding: 0 2px; margin-bottom: 8px; }
+ol.lista { list-style: none; margin: 0; padding: 0; }
+.card { display: grid; grid-template-columns: 84px 1fr; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--hair); }
+.lista.anim .card { animation: in 300ms var(--ease-out) both; }
+.lista.anim .card:nth-child(2) { animation-delay: 40ms } .lista.anim .card:nth-child(3) { animation-delay: 80ms } .lista.anim .card:nth-child(4) { animation-delay: 120ms } .lista.anim .card:nth-child(n+5) { animation-delay: 160ms }
+@keyframes in { from { opacity: 0; transform: translateY(6px); } }
+.mas { display: flex; justify-content: center; padding: 24px 0 8px; }
+.score b { display: block; font: 600 3rem/.95 var(--serif); letter-spacing: -.03em; color: var(--primary); }
+.score small { display: block; color: var(--text-2); font-size: .6875rem; letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+.bar { height: 3px; border-radius: 2px; background: var(--muted); margin-top: 10px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--primary); }
+.card h2 { overflow-wrap: anywhere; margin: 0 0 4px; font: 600 1.25rem/1.3 var(--serif); letter-spacing: -.01em; color: var(--primary); }
+.meta { color: var(--text-2); font-size: .875rem; display: flex; flex-wrap: wrap; gap: 4px 20px; margin-bottom: 10px; }
+.meta span { display: inline-flex; align-items: center; gap: 6px; }
+.meta svg { width: 15px; height: 15px; }
+.desc { margin: 0 0 12px; max-width: 110ch; overflow-wrap: anywhere; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; align-items: center; }
+.chip { font-size: .8125rem; padding: 2px 11px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-weight: 500; }
+.chip.aliado { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.chip.nota { background: transparent; color: var(--text-2); border: 1px solid var(--border); font-weight: 400; }
+.why { font-size: .75rem; color: var(--text-2); margin-right: 4px; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+a.go { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--primary); font-weight: 600; font-size: .9375rem; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t); }
+
+.hist { margin: 0 0 10px; font-size: .875rem; color: var(--text); max-width: 110ch; overflow-wrap: anywhere; }
+.hist b { font-weight: 600; }
+.hist.nd { color: var(--text-2); }
+.renov-caja { margin: 0 0 10px; padding: 10px 14px; border-radius: 10px; background: var(--primary-soft); color: var(--text); font-size: .875rem; max-width: 110ch; overflow-wrap: anywhere; }
+.renov-caja b { color: var(--primary); font-weight: 600; }
+.chip.renov { background: var(--bg); color: var(--primary); font-weight: 600; box-shadow: inset 0 0 0 1.5px var(--primary); }
+.state { text-align: center; padding: 56px 16px; border: 1px dashed var(--border); border-radius: var(--r); list-style: none; }
+.state svg { width: 28px; height: 28px; color: var(--text-2); }
+.state h2 { margin: 10px 0 4px; font: 600 1.375rem var(--serif); }
+.state p { margin: 0 auto 16px; color: var(--text-2); max-width: 52ch; }
+.solo-lectores { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skel { list-style: none; height: 110px; margin: 12px 0; border-radius: var(--r); background: linear-gradient(90deg, var(--muted), var(--surface), var(--muted)); background-size: 200% 100%; animation: sh 1.6s linear infinite; }
+@keyframes sh { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media (max-width: 600px) {
+  .card { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; }
+  .score { display: flex; align-items: baseline; gap: 10px; }
+  .score b { font-size: 2.25rem; }
+  .score .bar { flex: 1; margin: 0; }
+  input[type=search] { min-width: 0; width: 100%; }
+  .controls > * { flex: 1 1 auto; }
+  /* Los filtros de la lista van de a dos por fila: ocupan la mitad de alto antes de ver las tarjetas */
+  #vista-radar .controls label.f:not(.buscar) { flex: 1 1 calc(50% - 8px); min-width: 0; }
+  /* Encabezado: marca arriba, consulta y campana debajo en una sola fila */
+  .barra-in { row-gap: 12px; }
+  .marca { width: 100%; gap: 8px 12px; flex-wrap: wrap; }
+  .logo { height: 34px; }
+  .titulo { flex: 1 1 100%; border-left: 0; padding-left: 0; min-width: 0; }
+  h1 { font-size: 1.125rem; }
+  .sub { font-size: .75rem; }
+  /* Resumen en dos columnas, número arriba y rótulo abajo */
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .kpi, .kpi + .kpi { flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 12px 14px 0; border-left: 0; }
+  .kpi:nth-child(even) { padding-left: 16px; border-left: 1px solid var(--hair); }
+  .kpi:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .kpi b { font-size: 1.5rem; }
+  /* Filtros uno bajo otro, de lado a lado */
+  .controls > label.f, label.buscar { flex: 1 1 100%; }
+  /* Decisión y orden: cuadrícula de dos columnas, sin salirse de la pantalla */
+  .seg { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-radius: 22px; }
+  .seg button { justify-content: center; min-height: 44px; padding: 0 10px; white-space: nowrap; }
+  .decide-bar { gap: 12px; }
+  .der { width: 100%; gap: 8px 16px; }
+  .ord { flex: 1 1 100%; justify-content: space-between; }
+  .ord select { flex: 1; min-height: 44px; }
+  /* Valor y fechas bajo el título, alineados a la izquierda */
+  .cabeza { gap: 8px; }
+  .valor { text-align: left; flex: 1 1 100%; }
+  .acciones .sp { display: none; }
+  button.dec { flex: 1 1 auto; min-height: 44px; }
+  .state { padding: 40px 12px; }
+}
+.tabs { position: sticky; top: var(--alto-barra, 0px); z-index: 25; background: var(--bg); display: flex; gap: 4px; margin: 0 0 16px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; white-space: nowrap; font: 500 .9375rem var(--sans); min-height: 44px; padding: 0 16px; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; color: var(--text-2); cursor: pointer; transition: color var(--t), border-color var(--t); }
+.tab[aria-selected=true] { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+[hidden] { display: none !important; }
+
+.prog { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding: 4px 0 20px; }
+.prog .n { font: 600 2.5rem/1 var(--serif); letter-spacing: -.03em; color: var(--primary); }
+.prog .n small { font: 400 1rem var(--sans); color: var(--text-2); letter-spacing: 0; }
+.prog .bar { flex: 1 1 200px; margin: 0; height: 5px; }
+.nota-doc { color: var(--text-2); font-size: .875rem; max-width: 110ch; margin: 0 0 20px; }
+.grupo { margin-top: 28px; }
+.grupo h2 { font: 600 1.5rem/1.2 var(--serif); letter-spacing: -.01em; margin: 0; color: var(--primary); }
+.grupo > p { margin: 4px 0 8px; color: var(--text-2); font-size: .9375rem; }
+ul.docs { list-style: none; margin: 0; padding: 0; }
+@media (min-width: 1100px) { ul.docs { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; } }
+.doc { padding: 16px 0; border-top: 1px solid var(--hair); }
+.doc h3 { margin: 0; font: 600 1rem/1.4 var(--sans); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.doc p { margin: 4px 0 0; }
+.doc .para { max-width: 70ch; }
+.doc .datos { color: var(--text-2); font-size: .875rem; }
+.arch { list-style: none; margin: 10px 0 0; padding: 0; }
+.arch li { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; font-size: .875rem; padding: 6px 12px; background: var(--muted); border-radius: 8px; margin-top: 6px; }
+.arch .nom { font-weight: 500; overflow-wrap: anywhere; }
+.arch .fin { color: var(--text-2); }
+.subir { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-end; margin-top: 10px; }
+.subir label.f { font-size: .6875rem; }
+.subir input[type=date] { font: 400 .9375rem var(--sans); min-height: 44px; padding: 0 10px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+button.link { font: 600 .875rem var(--sans); min-height: 44px; padding: 0 8px; background: none; border: 0; color: var(--primary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+button.link.peligro { color: var(--danger); }
+.err { color: var(--danger); font-size: .875rem; margin: 6px 0 0; }
+.chip.nueva { background: var(--accent); color: #fff; font-weight: 600; }
+.chip.ok { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+.chip.aviso { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+details.req { margin: 6px 0 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+details.req summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-weight: 600; font-size: .9375rem; list-style-position: inside; }
+details.req .cuerpo { padding: 0 14px 12px; font-size: .875rem; }
+details.req h4 { margin: 12px 0 4px; font-size: .6875rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-2); }
+details.req ul { margin: 0; padding-left: 18px; }
+details.req li { margin: 2px 0; }
+details.req .falta { color: var(--danger); font-weight: 500; }
+details.req .nota { color: var(--text-2); margin: 10px 0 0; }
+.chip.sm { font-size: .75rem; padding: 1px 9px; font-weight: 500; }
+.chip.sin { background: var(--danger-soft); color: var(--danger); font-weight: 600; }
+.intro { color: var(--text-2); font-size: .9375rem; max-width: 110ch; margin: 0 0 20px; }
+.chip.alta { background: var(--primary); color: var(--on-primary); font-weight: 600; }
+.chip.media { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+.chip.revisar { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.cuenta-filtros { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--primary); color: var(--on-primary); font: 600 .75rem var(--sans); display: inline-grid; place-items: center; }
+.cuenta-filtros[hidden], .mas-filtros[hidden] { display: none; }
+#btn-mas[aria-expanded=true] { background: var(--primary-soft); }
+.mas-filtros { margin: -2px 0 14px; padding: 14px 16px; border: 1px solid var(--hair); border-radius: 12px; background: var(--surface); }
+.mas-filtros label.f { min-width: 200px; }
+#limpiar { align-self: center; min-height: 44px; }
+.crit-cuerpo { display: grid; gap: 36px; }
+.crit-nav { position: sticky; top: calc(var(--alto-barra, 0px) + var(--alto-tabs, 0px)); z-index: 5; display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 0; margin-bottom: -12px; background: var(--bg); border-bottom: 1px solid var(--hair); }
+.crit-nav button { font: 500 .875rem var(--sans); min-height: 38px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--primary); cursor: pointer; transition: background var(--t), border-color var(--t); }
+.crit-nav button:hover { background: var(--primary-soft); border-color: transparent; }
+.crit-nav button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.crit-sec { scroll-margin-top: 72px; }
+html:has(#vista-crit:not([hidden])) { scroll-padding-top: calc(var(--alto-barra, 0px) + var(--alto-tabs, 0px) + 76px); }
+.crit-sec > h2 { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin: 0 0 14px; font: 600 1.375rem/1.2 var(--serif); letter-spacing: -.01em; color: var(--primary); }
+.crit-sec > h2 small { font: 400 .8125rem var(--sans); letter-spacing: 0; color: var(--text-2); }
+/* Como se califica: dos columnas que se equilibran en alto */
+.cal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); grid-template-areas: "izq aj" "des eje"; gap: 16px; align-items: start; }
+.cal > .a-izq { grid-area: izq; display: grid; gap: 16px; } .cal > .a-aj { grid-area: aj; } .cal > .a-des { grid-area: des; } .cal > .a-eje { grid-area: eje; }
+.cal-pie { margin: 8px 0 0; padding-top: 10px; border-top: 1px solid var(--hair); font-size: .8125rem; color: var(--text-2); }
+.cal-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; background: var(--bg); }
+.cal-card h3 { margin: 0 0 6px; display: flex; align-items: center; gap: 10px; font: 600 1rem/1.3 var(--sans); }
+.cal-card h3 small { margin-left: auto; font: 400 .8125rem var(--sans); color: var(--text-2); }
+.cal-n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: var(--on-primary); font: 600 .8125rem var(--sans); display: inline-grid; place-items: center; }
+.fam { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) 3.4rem; gap: 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--hair); font-size: .9375rem; }
+.fam:first-of-type { border-top: 0; }
+.fam b { text-align: right; font-variant-numeric: tabular-nums; color: var(--primary); }
+.fam i { display: block; height: 8px; border-radius: 4px; background: var(--muted); overflow: hidden; }
+.fam i::after { content: ""; display: block; height: 100%; width: var(--w); background: var(--primary); border-radius: 4px; }
+.aj { display: grid; grid-template-columns: 3.4rem 1fr; gap: 2px 14px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--hair); font-size: .9375rem; }
+.aj:first-of-type { border-top: 0; }
+.pts { font: 600 .8125rem var(--sans); font-variant-numeric: tabular-nums; text-align: center; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pts.mas { background: var(--primary-soft); color: var(--primary); }
+.pts.menos { background: var(--danger-soft); color: var(--danger); }
+.aj small { grid-column: 2; color: var(--text-2); font-size: .8125rem; line-height: 1.35; }
+.escala { display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 8px 0 4px; }
+.escala span { display: block; }
+.escala .e0 { background: var(--muted); } .escala .e1 { background: var(--accent-soft); } .escala .e2 { background: var(--primary-soft); } .escala .e3 { background: var(--primary); }
+.marcas { position: relative; height: 16px; margin-bottom: 10px; font-size: .75rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.marcas span { position: absolute; transform: translateX(-50%); }
+.marcas span:first-child { transform: none; } .marcas span:last-child { transform: translateX(-100%); }
+.niv { display: grid; grid-template-columns: 8.5rem 1fr; gap: 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--hair); font-size: .875rem; color: var(--text-2); }
+.niv .chip { justify-self: start; }
+.panel-suave { border-radius: 14px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--hair); }
+.panel-suave h3 { margin: 0 0 8px; font: 600 1rem/1.3 var(--sans); }
+.panel-suave ul { margin: 0; padding-left: 18px; font-size: .9375rem; }
+.panel-suave li { margin: 5px 0; }
+.ejemplo .obj { color: var(--text-2); font-size: .875rem; margin: 0 0 6px; }
+.ejemplo .linea { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 0; border-top: 1px solid var(--hair); font-size: .9375rem; }
+.ejemplo .total { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 10px; border-top: 2px solid var(--primary); font-weight: 600; }
+.ejemplo .total b { font: 600 1.5rem/1 var(--serif); color: var(--primary); }
+/* Que se evalua: tabla de tres columnas */
+.crit-tabla { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--bg); }
+.crit-fila { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 2.2fr) minmax(0, 1.3fr); gap: 6px 32px; padding: 16px 20px; border-top: 1px solid var(--hair); align-items: start; }
+.crit-fila.cab { padding: 10px 20px; border-top: 0; background: var(--surface); font: 600 .75rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
+.crit-fila h3 { margin: 0 0 6px; font: 600 .9375rem/1.35 var(--sans); }
+.crit-fila p { margin: 0; font-size: .9375rem; }
+.crit-fila ul { margin: 8px 0 0; padding-left: 18px; font-size: .875rem; }
+.crit-fila li { margin: 3px 0; }
+.crit-fila .por { color: var(--text-2); font-size: .875rem; }
+.crit-fila .por::before { display: none; content: attr(data-et); margin-bottom: 2px; font: 600 .75rem var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+/* Terminos */
+.terms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
+.fam-terms { border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; background: var(--bg); }
+.fam-terms header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.fam-terms h3 { margin: 0; font: 600 1rem var(--sans); }
+.fam-terms .terms { margin: 10px 0 0; }
+.ruido { margin-top: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); }
+.ruido summary { cursor: pointer; padding: 12px 20px; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 600 1rem var(--sans); }
+.ruido .terms { padding: 0 20px 16px; margin: 0; }
+/* Revision semanal */
+ol.pasos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 165px), 1fr)); gap: 12px; counter-reset: paso; }
+ol.pasos li { counter-increment: paso; display: grid; gap: 10px; align-content: start; margin: 0; padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); font-size: .9375rem; }
+ol.pasos li::before { content: counter(paso); width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); font: 600 .8125rem var(--sans); display: grid; place-items: center; }
+@media (max-width: 600px) {
+  .barra.compacta .titulo { display: none; }
+  .barra.compacta .barra-der label.f { font-size: 0; gap: 0; }   /* sin la palabra «Periodo»; el selector sigue con su etiqueta para lectores */
+  .barra.compacta .marca { min-height: 40px; align-items: center; }
+  .crit-nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter, 20px)); padding-inline: var(--gutter, 20px); }
+  .crit-nav::-webkit-scrollbar { display: none; }
+  .crit-nav button { flex: none; white-space: nowrap; min-height: 40px; }
+  .crit-sec { scroll-margin-top: 64px; }
+}
+@media (max-width: 900px) {
+  .cal { grid-template-columns: 1fr; grid-template-areas: "izq" "aj" "des" "eje"; }
+  .crit-fila { grid-template-columns: 1fr; padding: 14px 16px; }
+  .crit-fila.cab { display: none; }
+  .crit-fila .por::before { display: block; }
+  .fam { grid-template-columns: 7.5rem minmax(0, 1fr) 3rem; }
+}
+.terms { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+.term { font-size: .8125rem; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); }
+.term.hit { background: var(--primary-soft); color: var(--primary); border-color: transparent; font-weight: 600; }
+.term.out { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+footer { color: var(--text-2); font-size: .8125rem; padding: 32px 0 0; max-width: 70ch; border-top: 1px solid var(--border); margin-top: 24px; }
+.tab:active { color: var(--text); }
+.seg button:active { background: var(--muted); }
+@media (pointer: coarse) {
+  button.link.mini, .notif li .acc button.link, .notif li .acc a.go, .notif footer button.link { min-height: 44px; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .seg button:hover { color: var(--text); }
+  button.dec:hover { border-color: var(--text-2); }
+  select:hover, input[type=search]:hover, input[type=number]:hover { border-color: var(--text-2); }
+  .chk:hover { border-color: var(--text-2); }
+  button.btn:hover { filter: brightness(1.1); }
+  a.go:hover { border-bottom-color: currentColor; }
+  .tab:hover { color: var(--text); }
+}
+
+.ayuda { position: fixed; z-index: 50; max-width: min(400px, calc(100vw - 24px)); padding: 14px 16px 15px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 28px rgba(1, 30, 145, .14), 0 2px 6px rgba(33, 37, 41, .08); pointer-events: none; opacity: 0; transform: translateY(-4px); transition: opacity .14s ease-out, transform .14s ease-out; }
+.ayuda.visible { opacity: 1; transform: none; }
+.ayuda b { display: block; margin-bottom: 4px; font: 600 .9375rem/1.3 var(--sans); color: var(--primary); }
+.ayuda p { margin: 0; font-size: .875rem; line-height: 1.5; }
+.ayuda p + p { margin-top: 6px; color: var(--text-2); }
+@media (prefers-reduced-motion: reduce) { .ayuda { transition: none; transform: none; } }
+
+/* Chip de quien usa el panel: inicial en un circulo, «Hola, Nombre» y un menu con «Cerrar sesion». */
+.usuario-wrap { position: relative; }
+.usuario { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px 0 6px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; font: 500 .9375rem var(--sans); white-space: nowrap; cursor: pointer; transition: background var(--t), transform 120ms var(--ease-out); }
+.usuario:active { transform: scale(0.97); }
+.usuario[aria-expanded=true] { background: rgba(255,255,255,.24); }
+.usuario[disabled] { cursor: default; opacity: 1; padding-right: 16px; }
+.usuario[disabled]:active { transform: none; }
+.usuario b { font-weight: 600; }
+.avatar { flex: none; width: 32px; height: 32px; border-radius: 50%; display: inline-grid; place-items: center; background: #fff; color: var(--barra); font: 700 .9375rem/1 var(--sans); }
+.usuario svg.i { width: 14px; height: 14px; opacity: .8; transition: transform var(--t) var(--ease-out); }
+.usuario[aria-expanded=true] svg.i { transform: rotate(180deg); }
+.usuario[disabled] svg.i { display: none; }
+.usuario-menu { position: absolute; right: 0; top: calc(100% + 10px); z-index: 40; width: min(300px, calc(100vw - 32px)); padding: 16px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 14px 34px rgba(1, 30, 145, .18), 0 2px 8px rgba(33, 37, 41, .1); }
+.usuario-menu[hidden] { display: none; }
+.um-saludo { margin: 0; font: 600 1.125rem/1.3 var(--sans); color: var(--primary); overflow-wrap: anywhere; }
+.um-nota { margin: 4px 0 14px; font-size: .8125rem; line-height: 1.5; color: var(--text-2); }
+.equipo-linea { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 8px 12px; border-radius: 10px; background: var(--primary-soft); color: var(--text); font-size: .875rem; width: fit-content; max-width: 100%; }
+.equipo-linea svg.i { width: 16px; height: 16px; color: var(--primary); }
+.equipo-linea b { font-weight: 600; color: var(--primary); }
+.equipo-linea .seg-estado { color: var(--text-2); }
+.equipo-linea.descarte { background: var(--muted); }
+.equipo-linea.descarte svg.i, .equipo-linea.descarte b { color: var(--text-2); }
+.usuario-menu button.btn.ghost { background: transparent; color: var(--primary); border-color: var(--primary); }
+.usuario-menu :focus-visible { outline-color: var(--ring); }
+.um-salir { width: 100%; justify-content: center; }
+.toast { position: fixed; z-index: 60; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translateX(-50%); max-width: min(520px, calc(100vw - 32px)); padding: 12px 18px; border-radius: 12px; background: var(--barra); color: #fff; font-size: .9375rem; box-shadow: 0 10px 28px rgba(1, 30, 145, .25); }
+.toast.error { background: var(--danger); }
+.toast[hidden] { display: none; }
+.count.persona b { color: var(--text); font-weight: 600; }
+.count.persona button.link.mini { margin: 0; min-height: 32px; }
+dialog#persona-dialog { width: min(440px, calc(100vw - 32px)); padding: 24px; border: 1px solid var(--border); border-radius: 16px; color: var(--text); box-shadow: 0 14px 34px rgba(1, 30, 145, .18); }
+dialog#persona-dialog::backdrop { background: rgba(0, 7, 117, .35); }
+dialog#persona-dialog h2 { margin: 0 0 8px; font: 600 1.25rem/1.3 var(--sans); color: var(--primary); }
+dialog#persona-dialog p { margin: 0 0 16px; color: var(--text-2); font-size: .9375rem; }
+dialog#persona-dialog input { width: 100%; font: 400 1rem var(--sans); min-height: 44px; padding: 0 12px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+.dlg-acc { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.barra-der { display: flex; align-items: flex-end; gap: 14px; margin-left: auto; }
+.campana-wrap { position: relative; }
+.campana { position: relative; width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.1); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background var(--t); }
+.campana svg { width: 20px; height: 20px; }
+.campana[aria-expanded=true] { background: rgba(255,255,255,.24); }
+.aviso-n { position: absolute; top: -5px; right: -5px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: #fff; color: var(--danger); font: 700 .75rem/20px var(--sans); text-align: center; box-shadow: 0 0 0 2px var(--barra); font-variant-numeric: tabular-nums; }
+.notif { position: absolute; right: 0; top: calc(100% + 10px); z-index: 40; width: min(440px, calc(100vw - 32px)); max-height: min(560px, 75vh); display: flex; flex-direction: column; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 14px 34px rgba(1, 30, 145, .18), 0 2px 8px rgba(33, 37, 41, .1); overflow: hidden; }
+.notif[hidden] { display: none; }
+.notif header { padding: 14px 16px 10px; border-bottom: 1px solid var(--hair); }
+.notif h2 { margin: 0; font: 600 1rem/1.3 var(--sans); color: var(--primary); }
+.notif header p { margin: 2px 0 0; font-size: .8125rem; color: var(--text-2); }
+.notif ul { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+.notif li { padding: 12px 16px; border-bottom: 1px solid var(--hair); }
+.notif li.nuevo { background: var(--primary-soft); }
+.notif li h3 { margin: 0; font: 600 .9375rem/1.3 var(--sans); color: var(--primary); overflow-wrap: anywhere; }
+.notif li .dato { margin: 2px 0 4px; font-size: .8125rem; color: var(--text-2); }
+.notif li p { margin: 0 0 6px; font-size: .875rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.notif li .acc { display: flex; gap: 14px; align-items: center; }
+.notif li .acc button.link, .notif li .acc a.go { min-height: 32px; padding: 0; font-size: .875rem; }
+.notif .vacio { padding: 28px 20px; text-align: center; color: var(--text-2); font-size: .875rem; }
+.notif footer { margin: 0; max-width: none; border-top: 1px solid var(--hair); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: .75rem; color: var(--text-2); }
+.notif footer button.link { min-height: 32px; padding: 0; font-size: .8125rem; }
+@media (max-width: 600px) {
+  .barra-der { width: 100%; margin-left: 0; gap: 0 10px; flex-wrap: wrap; }
+  .barra-der > .controls { flex: 1 1 auto; flex-wrap: nowrap; min-width: 0; }
+  .barra-der > .controls > label.f { flex: 1 1 0; min-width: 0; }
+  .barra-der > .controls { gap: 8px; }
+  .barra-der > .controls select { width: 100%; padding-left: 14px; padding-right: 32px; background-position: right 12px center; }
+  .barra-der > .controls > button.btn { flex: none; padding: 0 14px; gap: 6px; }
+  /* Campana: el panel se abre a todo el ancho, bajo el encabezado */
+  .campana-wrap, .usuario-wrap { position: static; }
+  .usuario { position: absolute; top: max(12px, env(safe-area-inset-top)); right: max(20px, env(safe-area-inset-right)); width: 40px; height: 40px; padding: 0; justify-content: center; gap: 0; }
+  .usuario .usuario-texto, .usuario svg.i { display: none; }
+  .campana { position: absolute; top: max(12px, env(safe-area-inset-top)); right: calc(max(20px, env(safe-area-inset-right)) + 48px); width: 40px; height: 40px; }
+  .usuario-menu { left: 12px; right: 12px; width: auto; top: calc(100% + 6px); }
+  .barra-der:has(> .controls[hidden]) { margin-top: -12px; }
+  .notif { left: 12px; right: 12px !important; width: auto; top: calc(100% + 6px); max-height: 70vh; }
+}
+</style>
+<style>
+/* Web compartida: pantalla de acceso y ajustes (se inserta solo en la version estatica). */
+#acceso { position: fixed; inset: 0; z-index: 100; display: flex; align-items: safe center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background: #F6F7FB; overflow-y: auto; overscroll-behavior: contain; }
+#acceso[hidden] { display: none; }
+#acceso-form { width: min(420px, 100%); background: #fff; border: 1px solid #D9DDEA; border-radius: 16px; overflow: hidden; box-shadow: 0 14px 34px rgba(1, 30, 145, .12); }
+.acceso-barra { background: #000775; padding: 28px 24px; }
+.acceso-barra img { display: block; height: 56px; width: auto; max-width: 100%; }
+.acceso-cuerpo { padding: 24px; }
+#acceso h1 { margin: 0 0 8px; font: 600 1.375rem/1.2 'DM Sans', system-ui, sans-serif; color: #011E91; }
+#acceso p { margin: 0 0 16px; color: #5b6270; font-size: .9375rem; line-height: 1.5; }
+#acceso label { display: block; font: 600 .6875rem 'DM Sans', system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; color: #5b6270; margin-bottom: 6px; }
+#acceso-usuario { margin-bottom: 14px; }
+#acceso-clave, #acceso-usuario { width: 100%; box-sizing: border-box; min-height: 44px; padding: 0 12px; font: 400 1rem 'DM Sans', system-ui, sans-serif; color: #212529; background: #F6F7FB; border: 1px solid #D9DDEA; border-radius: 8px; }
+#acceso-clave:focus-visible, #acceso-usuario:focus-visible { outline: 2px solid #011E91; outline-offset: 1px; }
+#acceso label.acceso-recordar { display: flex; align-items: center; gap: 8px; margin: 4px 0 12px; min-height: 44px; font: 400 .875rem 'DM Sans', system-ui, sans-serif; text-transform: none; letter-spacing: 0; color: #212529; cursor: pointer; }
+#acceso-error { color: #A12B2B !important; font-weight: 600; margin: 0 0 12px !important; }
+#acceso-entrar { width: 100%; min-height: 44px; border: 0; border-radius: 999px; background: #011E91; color: #fff; font: 600 1rem 'DM Sans', system-ui, sans-serif; cursor: pointer; }
+#acceso-entrar:disabled { opacity: .6; cursor: progress; }
+#acceso-entrar:focus-visible { outline: 2px solid #011E91; outline-offset: 2px; }
+#acceso .acceso-nota { margin: 14px 0 0; font-size: .8125rem; }
+/* En la web compartida no hay documentos de la empresa ni campana. */
+.campana-wrap { display: none !important; }
+/* Aviso de version nueva */
+#nueva-version { position: fixed; z-index: 120; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 14px; max-width: calc(100vw - 32px); padding: 10px 10px 10px 18px; border-radius: 999px; background: #000775; color: #fff; font: 500 .9375rem 'DM Sans', system-ui, sans-serif; box-shadow: 0 10px 28px rgba(1, 30, 145, .3); }
+#nueva-version button { min-height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: #fff; color: #000775; font: 600 .9375rem 'DM Sans', system-ui, sans-serif; cursor: pointer; flex: none; }
+#nueva-version button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+</style>
+<script>
+// Web compartida: no hay servidor. Los datos son archivos cifrados (AES-256-GCM, clave derivada de la
+// contrasena con PBKDF2) que se descifran aqui, en el navegador. La pagina original sigue pidiendo
+// "/api/..." y este codigo le responde con esos archivos, asi no hay que reescribirla.
+(function () {
+  'use strict';
+  const fetchReal = window.fetch.bind(window);
+  const ITERACIONES = 600000;
+  const INACTIVIDAD_MS = 6 * 3600 * 1000;   // pasado este tiempo sin tocar la pagina, vuelve a pedir la contrasena
+  const CLAVE_ACTIVIDAD = 'radar-actividad';
+  let clave = null, abrir;
+  const listo = new Promise(r => { abrir = r; });
+  const aBytes = (b64) => Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const aB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+
+  async function derivar(contrasena, salB64) {
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(contrasena), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: aBytes(salB64), iterations: ITERACIONES, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, true, ['decrypt']);
+  }
+  async function descifrar(k, buf) {
+    const b = new Uint8Array(buf);
+    const plano = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b.slice(0, 12) }, k, b.slice(12));
+    const flujo = new Blob([plano]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return JSON.parse(await new Response(flujo).text());
+  }
+  // Mismo calculo que src/publicar.py: el usuario se normaliza y se convierte en el nombre de su «ranura».
+  const normalizarUsuario = (u) => u.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  async function idRanura(usuario) {
+    const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('radar:' + normalizarUsuario(usuario)));
+    return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+  }
+  async function archivo(nombre) {
+    const r = await fetchReal('data/' + nombre + '?m=' + Math.floor(Date.now() / 60000), { cache: 'no-store' });
+    return r.ok ? r.arrayBuffer() : null;
+  }
+  const json = (obj, estado = 200) => new Response(JSON.stringify(obj), { status: estado, headers: { 'Content-Type': 'application/json' } });
+
+  window.fetch = async function (entrada, opciones) {
+    const url = typeof entrada === 'string' ? entrada : entrada.url;
+    if (!url.startsWith('/api/')) return fetchReal(entrada, opciones);
+    await listo;
+    const u = new URL(url, location.href);
+    const ruta = u.pathname;
+    if (ruta === '/api/notificaciones') return json({ items: [], sin_leer: 0, intervalo_min: 60 });
+    if (ruta === '/api/pendientes') return json([]);
+    const nombres = { '/api/vencimientos': 'vencimientos', '/api/mercado': 'mercado', '/api/criterios': 'criterios', '/api/hoja': 'hoja', '/api/documentos': 'documentos' };
+    const nombre = ruta === '/api/alertas' ? 'alertas_' + (u.searchParams.get('dias') || '7') : nombres[ruta];
+    if (!nombre) return json({ error: 'No disponible en la web compartida.' }, 404);
+    try {
+      const buf = await archivo(nombre + '.enc');
+      if (!buf) return json({ error: 'Este periodo todavía no está disponible. Pruebe con uno más corto.' }, 503);
+      return json(await descifrar(clave, buf));
+    } catch (_) { return json({ error: 'No se pudieron leer los datos. Recargue la página.' }, 500); }
+  };
+
+  async function probar(k) {
+    const buf = await archivo('check.enc');
+    if (!buf) throw new Error('sin datos');
+    return (await descifrar(k, buf)).ok === true;
+  }
+  // Cerrar sesion: olvida la clave y el nombre de este navegador y vuelve a la pantalla de acceso.
+  window.radarSalir = () => { olvidarClave(); location.reload(); };
+
+  // Ultima vez que alguien uso la pagina (se comparte entre pestañas del mismo navegador).
+  function ultimaActividad() {
+    try { return Number(localStorage.getItem(CLAVE_ACTIVIDAD)) || 0; } catch (_) { return 0; }
+  }
+  function marcarActividad() { try { localStorage.setItem(CLAVE_ACTIVIDAD, String(Date.now())); } catch (_) {} }
+  function olvidarClave() {
+    for (const almacen of [sessionStorage, localStorage]) {
+      try { almacen.removeItem('radar-clave'); almacen.removeItem('radar-usuario'); } catch (_) {}
+    }
+    try { localStorage.removeItem(CLAVE_ACTIVIDAD); } catch (_) {}
+  }
+  const vencida = () => Date.now() - ultimaActividad() > INACTIVIDAD_MS;
+  // Con la pagina abierta: se cuenta como actividad tocar, teclear o desplazarse (se anota a lo sumo cada 30 s).
+  // Si pasan 6 horas sin nada, se borra la clave y se recarga para mostrar la pantalla de acceso.
+  function vigilarInactividad() {
+    let ultimo = 0;
+    const tocar = () => { const t = Date.now(); if (t - ultimo > 30000) { ultimo = t; marcarActividad(); } };
+    ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(ev => addEventListener(ev, tocar, { passive: true, capture: true }));
+    const revisar = () => { if (vencida()) { olvidarClave(); location.reload(); } };
+    setInterval(revisar, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) revisar(); });
+    addEventListener('focus', revisar);
+    tocar();
+  }
+  async function entrarCon(k, recordar, nombre) {
+    clave = k;
+    window.RADAR_USUARIO = nombre || '';
+    const exportada = aB64(await crypto.subtle.exportKey('raw', k));
+    try {
+      const almacen = recordar ? localStorage : sessionStorage;
+      almacen.setItem('radar-clave', exportada);
+      if (nombre) almacen.setItem('radar-usuario', nombre); else almacen.removeItem('radar-usuario');
+    } catch (_) {}
+    document.getElementById('acceso').hidden = true;
+    vigilarInactividad();
+    abrir();
+  }
+  async function claveGuardada() {
+    if (vencida()) { olvidarClave(); return null; }
+    for (const almacen of [sessionStorage, localStorage]) {
+      try {
+        const g = almacen.getItem('radar-clave'); if (!g) continue;
+        const k = await crypto.subtle.importKey('raw', aBytes(g), { name: 'AES-GCM' }, true, ['decrypt']);
+        if (almacen.getItem('radar-usuario') && await probar(k)) { window.RADAR_USUARIO = almacen.getItem('radar-usuario'); return k; }
+        almacen.removeItem('radar-clave'); almacen.removeItem('radar-usuario');
+      } catch (_) { try { almacen.removeItem('radar-clave'); almacen.removeItem('radar-usuario'); } catch (__) {} }
+    }
+    return null;
+  }
+
+  // Aviso de version nueva: la pagina guarda su version en una etiqueta y la compara con version.txt.
+  function vigilarVersion() {
+    const meta = document.querySelector('meta[name="radar-version"]');
+    const actual = meta && meta.content;
+    if (!actual) return;
+    let avisado = false;
+    const revisar = async () => {
+      if (avisado) return;
+      try {
+        const nueva = (await (await fetchReal('version.txt?v=' + Date.now(), { cache: 'no-store' })).text()).trim();
+        if (!nueva || nueva === actual || !/^[0-9a-f]{12}$/.test(nueva)) return;
+        avisado = true;
+        const caja = document.createElement('div');
+        caja.id = 'nueva-version'; caja.setAttribute('role', 'status');
+        const texto = document.createElement('span'); texto.textContent = 'Hay una versión nueva de la web.';
+        const boton = document.createElement('button'); boton.type = 'button'; boton.textContent = 'Actualizar';
+        // La direccion con ?v= esquiva la memoria de 10 minutos de GitHub Pages.
+        boton.onclick = () => location.replace(location.pathname + '?v=' + nueva + location.hash);
+        caja.append(texto, boton); document.body.append(caja);
+      } catch (_) {}
+    };
+    setInterval(revisar, 5 * 60 * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) revisar(); });
+    addEventListener('focus', revisar);
+    revisar();
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    vigilarVersion();
+    const caja = document.getElementById('acceso'), form = document.getElementById('acceso-form');
+    const campo = document.getElementById('acceso-clave'), error = document.getElementById('acceso-error');
+    const boton = document.getElementById('acceso-entrar');
+    const guardada = await claveGuardada();
+    if (guardada) { clave = guardada; caja.hidden = true; vigilarInactividad(); abrir(); return; }
+    campo.focus();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.hidden = true; boton.disabled = true; boton.textContent = 'Comprobando…';
+      try {
+        const usuario = document.getElementById('acceso-usuario').value;
+        const recordar = document.getElementById('acceso-recordar').checked;
+        // Solo hay entrada personal: la contrasena abre la ranura de esa persona, que trae la clave de los
+        // datos y su nombre. La contrasena maestra (CLAVE_WEB) ya no sirve para entrar.
+        if (!usuario.trim()) throw new Error('sin usuario');
+        const ranuras = await (await fetchReal('data/usuarios.json', { cache: 'no-store' })).json();
+        const r = ranuras[await idRanura(usuario)];
+        if (!r) throw new Error('mala');
+        const dato = await descifrar(await derivar(campo.value, r.s), aBytes(r.b));
+        const k = await crypto.subtle.importKey('raw', aBytes(dato.k), { name: 'AES-GCM' }, true, ['decrypt']);
+        if (!(await probar(k))) throw new Error('mala');
+        await entrarCon(k, recordar, dato.n);
+      } catch (e) {
+        error.textContent = e && e.message === 'sin usuario' ? 'Escriba su usuario.' : 'Usuario o contraseña incorrectos. Revíselos e intente de nuevo.'; error.hidden = false;
+        campo.select(); boton.disabled = false; boton.textContent = 'Entrar';
+      }
+    });
+  });
+})();
+</script>
+</head>
+<body>
+<div id="acceso" role="dialog" aria-modal="true" aria-labelledby="acceso-titulo">
+  <form id="acceso-form" autocomplete="on">
+    <div class="acceso-barra"><img src="logo.webp" alt="Electroriente" width="218" height="56"></div>
+    <div class="acceso-cuerpo">
+      <h1 id="acceso-titulo">Radar de Licitaciones</h1>
+      <p>Esta página es privada. Escriba su usuario y su contraseña.</p>
+      <label for="acceso-usuario">Usuario</label>
+      <input id="acceso-usuario" type="text" required autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="por ejemplo: carlos">
+      <label for="acceso-clave">Contraseña</label>
+      <input id="acceso-clave" type="password" autocomplete="current-password" required>
+      <label class="acceso-recordar"><input id="acceso-recordar" type="checkbox"> Recordarme en este equipo</label>
+      <p id="acceso-error" role="alert" hidden></p>
+      <button id="acceso-entrar" type="submit">Entrar</button>
+      <p class="acceso-nota">Los datos viajan cifrados: sin la contraseña no se pueden leer. Por seguridad, se vuelve a pedir tras 6 horas sin usar la página. ¿No tiene usuario? Pídaselo a quien administra la web.</p>
+    </div>
+  </form>
+</div>
+
+<a class="skip" href="#resultados">Saltar a los resultados</a>
+<header class="barra"><div class="barra-in">
+    <div class="marca">
+      <img class="logo" src="logo.webp" alt="Electroriente" width="117" height="30">
+      <div class="titulo">
+      <h1>Radar de Licitaciones</h1>
+      <p class="sub">SECOP II · <span id="generado" title="Momento en que se consultó SECOP II por última vez">sin consultar</span></p>
+      </div>
+    </div>
+    <div class="barra-der">
+    <div class="controls" id="ctlRadar" role="group" aria-label="Consulta">
+      <label class="f">Periodo
+        <select id="dias">
+          <option value="3">Últimos 3 días</option>
+          <option value="7" selected>Últimos 7 días</option>
+          <option value="15">Últimos 15 días</option>
+          <option value="30">Últimos 30 días</option>
+        </select>
+      </label>
+      <button class="btn" id="actualizar" type="button">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        Actualizar
+      </button>
+    </div>
+    <div class="campana-wrap">
+      <button class="campana" id="campana" type="button" aria-expanded="false" aria-controls="notif-panel" aria-label="Notificaciones">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+        <span class="aviso-n" id="campana-n" hidden></span>
+      </button>
+      <section class="notif" id="notif-panel" aria-label="Licitaciones nuevas de Santander" hidden></section>
+    </div>
+    <div class="usuario-wrap" id="usuario-wrap" hidden>
+      <button class="usuario" id="usuario" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="usuario-menu">
+        <span class="avatar" id="avatar" aria-hidden="true"></span>
+        <span class="usuario-texto">Hola, <b id="saludo-nombre"></b></span>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="usuario-menu" id="usuario-menu" role="group" aria-label="Su sesión" hidden>
+        <p class="um-saludo" id="um-saludo"></p>
+        <p class="um-nota">Sus «Me interesa» quedan anotados con este nombre en la hoja del equipo.</p>
+        <button class="btn ghost um-salir" id="salir" type="button">Cerrar sesión</button>
+      </div>
+    </div>
+    </div>
+  </div></header>
+<div class="wrap">
+
+  <div class="tabs" role="tablist" aria-label="Secciones" id="tablist">
+    <button class="tab" role="tab" id="tab-radar" aria-selected="true" tabindex="0" type="button">Radar</button>
+    <button class="tab" role="tab" id="tab-revisar" aria-selected="false" tabindex="-1" type="button">Por revisar</button>
+    <button class="tab" role="tab" id="tab-venc" aria-selected="false" tabindex="-1" type="button">Oportunidades futuras</button>
+    <button class="tab" role="tab" id="tab-mer" aria-selected="false" tabindex="-1" type="button">Mercado</button>
+    <button class="tab" role="tab" id="tab-docs" aria-selected="false" tabindex="-1" type="button">Documentos</button>
+    <button class="tab" role="tab" id="tab-crit" aria-selected="false" tabindex="-1" type="button">Criterios</button>
+  </div>
+
+  <div id="vista-radar" role="tabpanel">
+  <section class="banner warn" id="trunc" hidden role="status"></section>
+
+  <section class="kpis" aria-label="Resumen" id="kpis" hidden></section>
+
+  <div class="controls" style="margin-bottom:12px" role="group" aria-label="Filtros">
+    <label class="f buscar">Buscar
+      <input type="search" id="q" placeholder="Entidad, objeto o término (atajo: /)" autocomplete="off">
+    </label>
+    <label class="f">Departamento
+      <select id="dep"><option value="">Todos</option></select>
+    </label>
+    <button class="btn ghost" id="btn-mas" type="button" aria-expanded="false" aria-controls="mas-filtros">Más filtros<span class="cuenta-filtros" id="cuenta-filtros" hidden></span></button>
+    <button class="link" id="limpiar" type="button" hidden>Limpiar filtros</button>
+  </div>
+  <div class="controls mas-filtros" id="mas-filtros" role="group" aria-label="Más filtros" hidden>
+    <label class="f">Renovación
+      <select id="renov">
+        <option value="">Todos</option>
+        <option value="si">Posibles renovaciones</option>
+      </select>
+    </label>
+    <label class="f">Novedad
+      <select id="novedad">
+        <option value="">Todas</option>
+        <option value="nuevas">Nuevas desde su última visita</option>
+      </select>
+    </label>
+    <label class="f" id="equipo-filtro" hidden>Equipo
+      <select id="equipo">
+        <option value="">Todos</option>
+        <option value="marcadas">Marcadas por el equipo</option>
+        <option value="libres">Que nadie ha marcado</option>
+      </select>
+    </label>
+  </div>
+
+  <main id="resultados" tabindex="-1">
+    <div class="decide-bar">
+      <div class="seg" id="seg" role="group" aria-label="Ver según su decisión"></div>
+      <div class="der">
+        <label class="ord">Ordenar por
+          <select id="orden">
+            <option value="puntaje">Mayor puntaje</option>
+            <option value="puntaje_asc">Menor puntaje</option>
+            <option value="valor">Mayor valor</option>
+            <option value="valor_asc">Menor valor</option>
+            <option value="recientes">Más reciente</option>
+          </select>
+        </label>
+        <p class="count" id="cuenta" aria-live="polite"></p>
+        <p class="count persona" id="persona-linea" hidden>Marcando como <b id="persona-nombre-vista"></b><span id="persona-cambio"> · <button class="link mini" id="persona-cambiar" type="button">Cambiar</button></span></p>
+      </div>
+    </div>
+    <ol class="lista" id="lista"></ol>
+  </main>
+  </div>
+
+  <div id="vista-venc" role="tabpanel" aria-labelledby="tab-venc" hidden>
+    <div class="controls" style="margin-bottom:12px" role="group" aria-label="Filtros de vencimientos">
+      <label class="f buscar">Buscar
+        <input type="search" id="vq" placeholder="Entidad, objeto o proveedor" autocomplete="off">
+      </label>
+      <label class="f">Departamento
+        <select id="vdep"><option value="">Todos</option></select>
+      </label>
+      <label class="f">Tipo de contrato
+        <select id="vtipo">
+          <option value="afin" selected>Suministro y compraventa</option>
+          <option value="todos">Todos los tipos</option>
+        </select>
+      </label>
+      <label class="f">Terminan en
+        <select id="vdias">
+          <option value="30">Los próximos 30 días</option>
+          <option value="90">Los próximos 3 meses</option>
+          <option value="180" selected>Los próximos 6 meses</option>
+        </select>
+      </label>
+    </div>
+    <p class="count" id="vcuenta" aria-live="polite"></p>
+    <ol class="lista" id="vlista"></ol>
+  </div>
+
+  <div id="vista-mer" role="tabpanel" aria-labelledby="tab-mer" hidden>
+    <div class="seg" id="mseg" role="group" aria-label="Qué mirar" style="margin-bottom:12px"></div>
+    <div class="controls" style="margin-bottom:12px" role="group" aria-label="Filtros del mercado">
+      <label class="f buscar">Buscar
+        <input type="search" id="mq" placeholder="Proveedor, entidad u objeto" autocomplete="off">
+      </label>
+      <label class="f">Departamento
+        <select id="mdep"><option value="">Todos</option></select>
+      </label>
+      <label class="f">Producto
+        <select id="mprod"><option value="">Todos</option></select>
+      </label>
+      <label class="f">Estado del contrato
+        <select id="mestado">
+          <option value="">Todos</option>
+          <option value="act">Activos</option>
+          <option value="fin">Finalizados</option>
+        </select>
+      </label>
+      <label class="f">Ordenar por
+        <select id="morden">
+          <option value="n">Más contratos</option>
+          <option value="total">Mayor valor total</option>
+          <option value="total_asc">Menor valor total</option>
+        </select>
+      </label>
+    </div>
+    <p class="count" id="mcuenta" aria-live="polite"></p>
+    <ol class="lista" id="mlista"></ol>
+  </div>
+
+  <div id="vista-docs" role="tabpanel" aria-labelledby="tab-docs" hidden>
+    <div class="prog" id="docs-prog"></div>
+    <div class="controls" role="group" aria-label="Filtro de documentos">
+      <label class="chk"><input type="checkbox" id="soloFaltan"> Solo los que faltan</label>
+    </div>
+    <div id="docs-lista" aria-live="polite"></div>
+  </div>
+
+  <div id="vista-crit" role="tabpanel" aria-labelledby="tab-crit" hidden>
+    <div id="crit-cuerpo" class="crit-cuerpo"></div>
+  </div>
+
+  <footer>
+    Las alertas son exploratorias mientras haya pendientes bloqueantes: pueden mostrar procesos a los que la empresa aún no puede presentarse.
+    El panel no interpreta derecho contractual.
+  </footer>
+</div>
+
+<div class="ayuda" id="ayuda" role="tooltip"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="persona-dialog" aria-labelledby="persona-titulo">
+  <form id="persona-form" method="dialog">
+    <h2 id="persona-titulo">¿Quién está marcando?</h2>
+    <p>Su nombre aparecerá en la hoja del equipo junto a cada licitación que marque como «Me interesa». Se guarda solo en este navegador.</p>
+    <label class="f">Su nombre
+      <input id="persona-nombre" type="text" maxlength="60" autocomplete="name" required>
+    </label>
+    <div class="dlg-acc">
+      <button type="button" class="btn ghost" id="persona-cancelar">Cancelar</button>
+      <button type="submit" class="btn">Guardar y continuar</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const ICON = {
+  pin: '<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  cash: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/>',
+  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  users: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c2.9 0 5 2.1 5 5.8"/>'
+};
+function svg(name) {
+  const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  s.setAttribute('class', 'i'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true');
+  s.innerHTML = ICON[name];
+  return s;
+}
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function antiguedad(f) {
+  if (!f) return '';
+  const d = new Date(f + 'T00:00:00'); if (isNaN(d)) return f;
+  const dias = Math.floor((Date.now() - d.getTime()) / 86400000);
+  const fecha = d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+  return `Publicado ${fecha} · ${dias <= 0 ? 'hoy' : dias === 1 ? 'ayer' : `hace ${dias} días`}`;
+}
+// Fecha limite para ofertar. SECOP la publica en pocos procesos: si falta, se dice.
+function cierre(f) {
+  const d = f ? new Date(f + 'T00:00:00') : null;
+  // Sin fecha publicada no se muestra nada.
+  if (!d || isNaN(d)) return document.createDocumentFragment();
+  const el1 = el('small', 'cierre');
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  const dias = Math.round((d - hoy) / 86400000);
+  const fecha = d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+  el1.textContent = `Cierra ${fecha} · ${dias <= 0 ? 'hoy' : dias === 1 ? 'mañana' : `en ${dias} días`}`;
+  if (dias <= 3) el1.classList.add('pronto');
+  return el1;
+}
+// Cuantos proveedores distintos ya respondieron al proceso (dato de SECOP). Casi todos los
+// procesos abiertos muestran 0 porque SECOP publica ese conteo tarde: 0 no significa "nadie".
+function respondieron(n) {
+  // Sin respuestas reportadas por SECOP no se muestra nada.
+  if (!n) return document.createDocumentFragment();
+  const s = el('small', 'resp');
+  s.textContent = n === 1 ? '1 proveedor ya respondió' : `${n} proveedores ya respondieron`;
+  s.title = 'Proveedores distintos que ya enviaron su respuesta u oferta a este proceso, según SECOP. Menos proveedores significa menos competencia.';
+  return s;
+}
+const pesos = (v) => v ? '$' + Math.round(v).toLocaleString('es-CO') + ' COP' : 'Sin valor publicado';
+
+let datos = null, ultimaConsulta = null;
+
+function hace(ts) {
+  const m = Math.floor((Date.now() / 1000 - ts) / 60);
+  if (m < 1) return 'hace menos de un minuto';
+  if (m < 60) return `hace ${m} min`;
+  const h = Math.floor(m / 60);
+  return h < 24 ? `hace ${h} h` : `hace ${Math.floor(h / 24)} d`;
+}
+function pintarConsulta() {
+  if (!ultimaConsulta) return;
+  const f = new Date(ultimaConsulta * 1000);
+  const fecha = f.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }) + ', ' +
+                f.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+  $('generado').textContent = `última consulta a SECOP: ${fecha} (${hace(ultimaConsulta)})`;
+}
+setInterval(pintarConsulta, 30000);
+
+// ---- Actualizacion automatica: el servidor consulta SECOP cada 30 minutos y la pantalla
+// recoge el resultado nuevo sin parpadeo ni que nadie pulse Actualizar.
+let refrescando = false;
+async function refrescarSilencioso() {
+  if (refrescando || !datos) return;
+  refrescando = true;
+  try {
+    const r = await fetch(`/api/alertas?dias=${$('dias').value}`);
+    const j = await r.json();
+    if (!r.ok || j.generado_ts === ultimaConsulta) return;
+    datos = j; ultimaConsulta = j.generado_ts; animar = false;
+    pintarConsulta(); llenarDeps(); pintarKpis(); pintar();
+  } catch (_) { /* la proxima vuelta lo intenta de nuevo */ }
+  finally { refrescando = false; }
+}
+// El panel local consulta SECOP cada 30 min; la web compartida se publica cada 30 min (con algo de retraso de GitHub).
+const desactualizado = () => ultimaConsulta && Date.now() / 1000 - ultimaConsulta > (document.documentElement.hasAttribute('data-estatico') ? 2700 : 1800);
+setInterval(() => { if (!document.hidden && desactualizado()) refrescarSilencioso(); }, 120000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { cargarNotif(); if (desactualizado()) refrescarSilencioso(); } });
+
+// ---- Campana: licitaciones nuevas de Santander
+let notif = { items: [], sin_leer: 0 };
+async function cargarNotif() {
+  try {
+    const r = await fetch('/api/notificaciones'); if (!r.ok) return;
+    notif = await r.json(); pintarCampana();
+  } catch (_) { /* sin aviso: el panel funciona igual */ }
+}
+function pintarCampana() {
+  const n = notif.sin_leer, b = $('campana-n');
+  b.hidden = !n; b.textContent = n > 99 ? '99+' : String(n);
+  $('campana').setAttribute('aria-label', n ? `Notificaciones: ${plural(n, 'licitación nueva de Santander', 'licitaciones nuevas de Santander')}` : 'Notificaciones, ninguna nueva');
+  document.title = (n ? `(${n}) ` : '') + 'Radar de Licitaciones';
+  if (!$('notif-panel').hidden) pintarPanelNotif();
+}
+function verEnRadar(it) {
+  cerrarNotif(false);
+  vista('radar');
+  $('dep').value = ''; $('q').value = it.entidad; $('renov').value = ''; $('novedad').value = ''; $('equipo').value = '';
+  ver = 'todas'; mostrados = PAGINA; animar = true; sincronizarFiltros(true); pintar();
+  window.scrollTo({ top: 0 });
+}
+function pintarPanelNotif() {
+  const box = $('notif-panel');
+  const head = el('header'); head.append(el('h2', '', 'Licitaciones nuevas de Santander'),
+    el('p', '', 'Alertas de entidades de Santander que aparecieron desde la última vez.'));
+  const lista = el('ul');
+  if (!notif.items.length) lista.append(el('li', 'vacio', 'Todavía no hay licitaciones nuevas de Santander. Cuando aparezca una, la verá aquí.'));
+  notif.items.forEach(it => {
+    const li = el('li', it.leida ? '' : 'nuevo');
+    li.append(el('h3', '', it.entidad));
+    li.append(el('div', 'dato', `Puntaje ${it.puntaje} · ${pesos(it.valor)} · detectada ${hace(it.detectado_ts)}`));
+    li.append(el('p', '', it.descripcion));
+    const acc = el('div', 'acc');
+    const ir = el('button', 'link', 'Ver en el Radar'); ir.type = 'button'; ir.onclick = () => verEnRadar(it);
+    acc.append(ir);
+    if (it.url) { const a = el('a', 'go'); a.href = it.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.append(document.createTextNode('Abrir en SECOP'), svg('ext')); acc.append(a); }
+    li.append(acc); lista.append(li);
+  });
+  const pie = el('footer');
+  const prox = notif.proxima_ts ? Math.max(1, Math.round((notif.proxima_ts - Date.now() / 1000) / 60)) : null;
+  pie.append(el('span', '', notif.error ? notif.error : `Busca en SECOP cada ${notif.intervalo_min || 30} min${notif.ultima_ts ? ` · última ${hace(notif.ultima_ts)}` : ''}${prox ? ` · próxima en ${prox} min` : ''}`));
+  if (notif.sin_leer) { const m = el('button', 'link', 'Marcar todas como leídas'); m.type = 'button'; m.onclick = marcarLeidas; pie.append(m); }
+  box.replaceChildren(head, lista, pie);
+}
+async function marcarLeidas() {
+  try { await fetch('/api/notificaciones/leer', { method: 'POST', headers: API_POST }); } catch (_) {}
+  await cargarNotif();
+}
+function abrirNotif() {
+  const caja = $('notif-panel'); pintarPanelNotif(); caja.style.right = '0'; caja.hidden = false;
+  const izq = caja.getBoundingClientRect().left;       // si se sale por la izquierda, se corre hacia adentro
+  if (izq < 12) caja.style.right = (izq - 12) + 'px';
+ $('campana').setAttribute('aria-expanded', 'true'); cargarNotif(); }
+function cerrarNotif(devolverFoco = true) {
+  $('notif-panel').hidden = true; $('campana').setAttribute('aria-expanded', 'false');
+  if (devolverFoco) $('campana').focus();
+}
+$('campana').onclick = () => ($('notif-panel').hidden ? abrirNotif() : cerrarNotif());
+document.addEventListener('click', e => { if (!$('notif-panel').hidden && !e.target.closest('.campana-wrap')) cerrarNotif(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('notif-panel').hidden) cerrarNotif(); });
+setInterval(cargarNotif, 60000);
+cargarNotif();
+
+// forzar: el boton Actualizar pide a SECOP una consulta nueva (el panel local guarda el resultado 30 minutos).
+// manual: lo pidio una persona con el boton; la web compartida solo relee lo ultimo publicado.
+const estatico = document.documentElement.hasAttribute('data-estatico');
+async function cargar(forzar = false, manual = false) {
+  const btn = $('actualizar'), antes = ultimaConsulta;
+  btn.disabled = true;
+  const lista = $('lista');
+  lista.replaceChildren(...esqueletos());
+  const d = +$('dias').value;
+  $('cuenta').textContent = estatico ? 'Actualizando…' : forzar ? 'Consultando SECOP… puede tardar unos 30 segundos.' : 'Cargando…';
+  $('kpis').hidden = true; $('trunc').hidden = true;
+  try {
+    // Web compartida: «Actualizar» pide a GitHub una publicacion nueva (la hoja de Google hace de intermediario)
+    // y espera hasta 3 minutos a que aparezcan los datos nuevos.
+    const lanzada = manual && estatico && (await pedirPublicacion()) === 'lanzada';
+    if (lanzada) $('cuenta').textContent = 'Buscando en SECOP… la lista nueva estará lista en 1 o 2 minutos.';
+    const url = `/api/alertas?dias=${$('dias').value}` + (forzar && !estatico ? '&forzar=1' : '');
+    let r, j;
+    for (let intento = 0; ; intento++) {
+      r = await fetch(url); j = await r.json();
+      if (!r.ok || !lanzada || j.generado_ts !== antes || intento >= 12) break;
+      await new Promise(res => setTimeout(res, 15000));
+    }
+    if (!r.ok) throw new Error(j.error || 'Error inesperado');
+    datos = j; mostrados = PAGINA; animar = true; datos30 = null; cargarAmplia();
+    ultimaConsulta = j.generado_ts; pintarConsulta();
+    if (manual && estatico && !lanzada && antes === j.generado_ts) avisar(`Ya tiene lo más reciente: los datos se publican cada 30 minutos (última publicación ${hace(j.generado_ts)}).`);
+    llenarDeps();
+    pintarKpis();
+    if (j.truncado) {
+      const t = $('trunc'); t.hidden = false;
+      t.replaceChildren(el('strong', '', 'Resultado incompleto: se alcanzó el límite de procesos. Reduce el periodo.'));
+    }
+    pintar();
+  } catch (e) {
+    datos = null;
+    $('cuenta').textContent = '';
+    const st = el('li', 'state');
+    st.append(svg('alert'), el('h2', '', 'No se pudo cargar el radar'), el('p', '', e.message));
+    const b = el('button', 'btn', 'Reintentar'); b.type = 'button'; b.onclick = () => cargar(true, true);
+    st.append(b);
+    lista.replaceChildren(st);
+  } finally { btn.disabled = false; }
+}
+
+function llenarDeps() {
+  const sel = $('dep'), actual = sel.value;
+  const deps = [...new Set(datos.resultados.map(r => r.departamento).filter(Boolean))].sort();
+  sel.replaceChildren(new Option('Todos', ''), ...deps.map(d => new Option(d, d)));
+  sel.value = deps.includes(actual) ? actual : '';
+}
+
+const MODOS = {
+  radar: { f: r => r.nivel !== 'revisar' },
+  revisar: { f: r => r.nivel === 'revisar' }
+};
+let modo = 'radar', mostrados = 50, animar = true;
+const PAGINA = 50;
+const plural = (n, uno, varios) => `${n.toLocaleString('es-CO')} ${n === 1 ? uno : varios}`;
+const base = () => datos.resultados.filter(MODOS[modo].f);
+
+function pintarKpis() {
+  const r = base();
+  const k = $('kpis'); k.hidden = false;
+  const data = [
+    [datos.revisados.toLocaleString('es-CO'), 'Procesos revisados', 'Procesos abiertos de SECOP II que el radar leyó en el periodo elegido.'],
+    [r.length, modo === 'radar' ? 'Alertas' : 'Procesos', modo === 'radar' ? 'Procesos con puntaje suficiente para avisarle.' : 'Procesos con una señal débil que conviene mirar.'],
+    [r.filter(x => x.requiere_aliado).length, 'Requieren aliado', 'Obra con montaje: Electroriente suministra, pero instalar requiere un aliado (unión temporal o consorcio).'],
+    [r.length ? Math.max(...r.map(x => x.puntaje)) : '—', 'Mejor puntaje', 'El puntaje más alto de la lista, de 0 a 100.']
+  ];
+  k.replaceChildren(...data.map(([n, t, ayuda]) => { const d = el('div', 'kpi'); d.title = ayuda; d.append(el('b', '', String(n)), el('span', '', t)); return d; }));
+}
+
+let decisiones = {};
+try { decisiones = JSON.parse(localStorage.getItem('radar-decisiones') || '{}'); } catch (_) {}
+let ver = 'pendientes', orden = 'puntaje';
+const idDe = (r) => r.id || (r.entidad + '|' + r.referencia);
+const estadoDe = (r) => decisiones[idDe(r)] || '';
+function decidir(r, valor) {
+  const k = idDe(r), antes = decisiones[k] || '';
+  if (valor) decisiones[k] = valor; else delete decisiones[k];
+  try { localStorage.setItem('radar-decisiones', JSON.stringify(decisiones)); } catch (_) {}
+  // La hoja del equipo se entera de lo que empieza o deja de ser «Me interesa» o «Descartar».
+  if (valor === 'interesa' || antes === 'interesa' || valor === 'descarta' || antes === 'descarta') sincronizarHoja(r, valor, antes);
+}
+
+// ---- Hoja compartida del equipo -------------------------------------------------------------
+// Cada «Me interesa» se copia a una hoja de Google Sheets que ve todo el equipo. La direccion y la
+// clave de la hoja llegan de /api/hoja (panel local: config/hoja.yaml; web compartida: cifradas).
+// Si no hay conexion, el aviso queda en una cola y se reintenta.
+let hojaCfg = null, enviandoHoja = false, toastTimer = null;
+let colaHoja = {};
+try { colaHoja = JSON.parse(localStorage.getItem('radar-hoja-cola') || '{}'); } catch (_) {}
+const guardarCola = () => { try { localStorage.setItem('radar-hoja-cola', JSON.stringify(colaHoja)); } catch (_) {} };
+// Nombre de quien marca: el de su usuario (web compartida) o el configurado en el panel local; solo si no hay
+// ninguno de los dos se le pregunta y se recuerda en este navegador.
+// Siempre con mayuscula inicial en cada palabra («ana pérez» -> «Ana Pérez»), salvo «de», «del», «la», «y»...
+const PARTICULAS = new Set(['de', 'del', 'la', 'las', 'los', 'y', 'e', 'van', 'von']);
+const nombrePropio = (s) => String(s || '').trim().replace(/\s+/g, ' ').toLowerCase().split(' ')
+  .map((p, i) => (i && PARTICULAS.has(p)) ? p : p.replace(/(^|[-'])(\p{L})/gu, (_, a, l) => a + l.toUpperCase())).join(' ');
+const personaFija = () => nombrePropio(window.RADAR_USUARIO || (hojaCfg && hojaCfg.persona) || '');
+const personaGuardada = () => { try { return personaFija() || nombrePropio(localStorage.getItem('radar-persona')); } catch (_) { return personaFija(); } };
+async function cargarHoja() {
+  if (hojaCfg) return hojaCfg;
+  try { const r = await fetch('/api/hoja'); const j = r.ok ? await r.json() : {}; hojaCfg = j && (j.servidor || j.url) ? j : { url: '' }; }
+  catch (_) { return { url: '' }; }
+  return hojaCfg;
+}
+function avisar(texto, error = false) {
+  const t = $('toast'); t.textContent = texto; t.classList.toggle('error', error); t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, error ? 6000 : 3500);
+}
+function pedirPersona() {
+  return new Promise(resolver => {
+    const d = $('persona-dialog'), campo = $('persona-nombre'); campo.value = personaGuardada();
+    let listo = false;
+    const cerrar = (valor) => { if (listo) return; listo = true; d.close(); resolver(valor); };
+    $('persona-form').onsubmit = (e) => {
+      e.preventDefault();
+      const n = nombrePropio(campo.value);
+      if (!n) { campo.focus(); return; }
+      try { localStorage.setItem('radar-persona', n); } catch (_) {}
+      pintarPersona(); cerrar(n);
+    };
+    $('persona-cancelar').onclick = () => cerrar('');
+    d.oncancel = (e) => { e.preventDefault(); cerrar(''); };
+    d.showModal(); campo.focus(); campo.select();
+  });
+}
+function pintarPersona() {
+  const n = personaGuardada();
+  $('persona-linea').hidden = !(hojaCfg && (hojaCfg.servidor || hojaCfg.url) && n && !personaFija());   // con nombre fijo ya lo dice el chip de arriba
+  $('persona-nombre-vista').textContent = n;
+  $('persona-cambio').hidden = !!personaFija();   // con usuario no se cambia el nombre desde aqui
+}
+async function vaciarColaHoja() {
+  if (enviandoHoja) return; enviandoHoja = true;
+  try {
+    const cfg = await cargarHoja(); if (!cfg.servidor && !cfg.url) return;
+    for (const id of Object.keys(colaHoja)) {
+      const item = colaHoja[id];
+      try {
+        // En el panel local el servidor reenvia a la hoja (la clave no sale de ahi).
+        const resp = cfg.servidor
+          ? await fetch('/api/hoja', { method: 'POST', headers: API_POST, body: JSON.stringify(item) })
+          : await fetch(cfg.url, { method: 'POST', redirect: 'follow',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...item, token: cfg.token }) });
+        const res = await resp.json();
+        if (!res.ok) throw new Error(res.error || 'rechazada');
+        if (colaHoja[id] === item) delete colaHoja[id];
+        guardarCola();
+        avisar(item.estado === 'interesa' ? 'Guardada en la hoja del equipo.' : 'Hoja del equipo actualizada.');
+        cargarEquipo();
+      } catch (_) { avisar('No se pudo guardar en la hoja del equipo. Se reintentará.', true); break; }
+    }
+  } finally { enviandoHoja = false; }
+}
+async function sincronizarHoja(r, valor, antes) {
+  const cfg = await cargarHoja(); if (!cfg.servidor && !cfg.url) return;
+  let persona = personaGuardada();
+  if (valor === 'interesa' && !persona) {
+    persona = await pedirPersona();
+    if (!persona) { avisar('Marcada solo en este navegador: falta su nombre para compartirla con el equipo.', true); return; }
+  }
+  if (!persona && (valor === 'descarta' || antes === 'descarta')) return;   // sin nombre no se comparte un descarte
+  colaHoja[idDe(r)] = { id: idDe(r), estado: valor, antes: antes || '', persona, entidad: r.entidad || '', objeto: (r.descripcion || '').slice(0, 600),
+    valor: r.valor_cop || '', cierre: r.fecha_cierre || '', puntaje: r.puntaje,
+    factibilidad: ({ alta: 'Alta', media: 'Media', revisar: 'Por revisar' })[r.nivel] || r.nivel || '',
+    departamento: r.departamento || '', modalidad: r.modalidad || '', tipo: r.tipo_contrato || '', url: r.url || '' };
+  guardarCola(); vaciarColaHoja();
+}
+// Chip de usuario: «Hola, Ana» con su inicial. En la web compartida abre un menu con «Cerrar sesion»;
+// en el panel local (sin inicio de sesion) es solo informativo.
+function pintarSaludo() {
+  const nombre = personaFija(), primero = nombre.split(' ')[0];
+  $('usuario-wrap').hidden = !primero;
+  if (!primero) return;
+  $('avatar').textContent = primero.charAt(0).toUpperCase();
+  $('saludo-nombre').textContent = primero;
+  $('um-saludo').textContent = nombre;
+  const puedeSalir = !!window.radarSalir, boton = $('usuario');
+  boton.disabled = !puedeSalir;
+  boton.setAttribute('aria-label', 'Hola, ' + primero + (puedeSalir ? '. Abrir menú de sesión' : ''));
+  const abrir = (si) => { $('usuario-menu').hidden = !si; boton.setAttribute('aria-expanded', String(si)); };
+  boton.onclick = () => abrir($('usuario-menu').hidden);
+  $('salir').onclick = () => window.radarSalir && window.radarSalir();
+  if (!pintarSaludo.escuchando) {
+    pintarSaludo.escuchando = true;
+    document.addEventListener('click', e => { if (!$('usuario-menu').hidden && !e.target.closest('.usuario-wrap')) abrir(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('usuario-menu').hidden) { abrir(false); boton.focus(); } });
+  }
+}
+// ---- Lo que marco el equipo: se lee de la hoja de Google y se muestra en cada tarjeta --------------
+let equipoMarcas = {}, equipoDescartes = {}, equipoFirma = '', equipoSeq = 0, equipoEstado = 'cargando';
+const primerNombre = (n) => String(n).trim().split(' ')[0];
+const unirNombres = (l) => l.length < 2 ? (l[0] || '') : l.slice(0, -1).join(', ') + ' y ' + l[l.length - 1];
+function lineaEquipo(m) {
+  const nombres = String(m.persona || '').split(',').map(s => s.trim()).filter(Boolean);
+  const yo = personaFija().toLowerCase();
+  const otros = nombres.filter(n => n.toLowerCase() !== yo), conmigo = otros.length !== nombres.length;
+  const quien = otros.map(primerNombre);
+  const p = el('p', 'equipo-linea'); p.append(svg('users'));
+  const t = el('span');
+  if (conmigo && !otros.length) t.append(document.createTextNode('Usted la marcó en la hoja del equipo'));
+  else {
+    const b = el('b', '', unirNombres(quien));
+    t.append(conmigo ? document.createTextNode('Usted y ') : '', b, document.createTextNode(conmigo || otros.length > 1 ? ' la marcaron' : ' la marcó'));
+  }
+  p.append(t);
+  if (m.seguimiento) p.append(el('span', 'seg-estado', '· ' + m.seguimiento));
+  return p;
+}
+function lineaDescartes(m) {
+  const nombres = String(m.persona || '').split(',').map(s => s.trim()).filter(Boolean);
+  const yo = personaFija().toLowerCase();
+  const otros = nombres.filter(n => n.toLowerCase() !== yo);
+  if (!otros.length) return null;                      // solo usted: ya lo ve en su propia tarjeta
+  const p = el('p', 'equipo-linea descarte'); p.append(svg('users'));
+  const t = el('span');
+  t.append(el('b', '', unirNombres(otros.map(primerNombre))), document.createTextNode(otros.length > 1 ? ' la descartaron' : ' la descartó'));
+  p.append(t);
+  return p;
+}
+async function cargarEquipo() {
+  const cfg = await cargarHoja(); if (!cfg.servidor && !cfg.url) return;
+  const mia = ++equipoSeq;      // si salen dos lecturas, solo vale la ultima que se pidio
+  if (equipoEstado === 'error') equipoEstado = 'cargando';
+  try {
+    const resp = cfg.servidor
+      ? await fetch('/api/hoja', { method: 'POST', headers: API_POST, body: JSON.stringify({ accion: 'equipo' }) })
+      : await fetch(cfg.url, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ accion: 'equipo', token: cfg.token }) });
+    const res = await resp.json();
+    if (mia !== equipoSeq) return;
+    if (!res.ok || !Array.isArray(res.filas)) throw new Error('hoja');
+    const veniaSinDatos = equipoEstado !== 'ok'; equipoEstado = 'ok';
+    const descartes = Array.isArray(res.descartes) ? res.descartes : [];
+    const firma = JSON.stringify([res.filas, descartes]);
+    if (firma === equipoFirma && !veniaSinDatos) return;   // nada cambio: no se redibuja
+    equipoFirma = firma;
+    equipoMarcas = Object.fromEntries(res.filas.map(f => [f.id, f]));
+    equipoDescartes = Object.fromEntries(descartes.map(f => [f.id, f]));
+    $('equipo-filtro').hidden = false;
+    if (datos) pintar();
+  } catch (_) {
+    // Si ya habia datos, se conservan y se reintenta en la proxima vuelta.
+    if (mia === equipoSeq && equipoEstado !== 'ok') equipoEstado = 'error';
+  }
+}
+
+// Pide a GitHub (por medio del script de la hoja, que guarda el permiso) una publicacion nueva de la web.
+// Devuelve 'lanzada' (o ya habia una en curso) o 'no' (no disponible: se lee lo ya publicado).
+async function pedirPublicacion() {
+  const cfg = await cargarHoja();
+  if (!cfg.url || cfg.servidor) return 'no';
+  try {
+    const resp = await fetch(cfg.url, { method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ accion: 'actualizar', token: cfg.token }) });
+    const res = await resp.json();
+    return res.ok ? 'lanzada' : 'no';          // tambien si ya habia una en curso: se espera a que termine
+  } catch (_) { return 'no'; }
+}
+async function iniciarHoja() {
+  const cfg = await cargarHoja(); pintarSaludo();
+  if (!cfg.servidor && !cfg.url) return;
+  pintarPersona(); vaciarColaHoja();
+  cargarEquipo();
+  setInterval(() => { if (!document.hidden) cargarEquipo(); }, 180000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) cargarEquipo(); });
+  setInterval(() => { if (Object.keys(colaHoja).length) vaciarColaHoja(); }, 60000);
+  $('persona-cambiar').onclick = () => pedirPersona();
+}
+// ---- Novedades: lo que aparecio despues de la ultima vez que esta persona uso la pagina ------------------
+// Cada navegador recuerda cuando vio por primera vez cada proceso. «Su última visita» es la ultima actividad
+// anterior a esta sesion (una sesion = una pestaña abierta; recargarla no cuenta como visita nueva).
+const vistosClave = 'radar-vistos', visitaClave = 'radar-ultima-visita';
+let vistos = {}, corteVisita = null;
+try { vistos = JSON.parse(localStorage.getItem(vistosClave) || '{}'); } catch (_) {}
+try {
+  corteVisita = sessionStorage.getItem('radar-corte');
+  if (corteVisita === null) {
+    corteVisita = localStorage.getItem(visitaClave) || '0';          // '0' = primera vez: nada se marca como nuevo
+    sessionStorage.setItem('radar-corte', corteVisita);
+  }
+} catch (_) { corteVisita = '0'; }
+corteVisita = +corteVisita || 0;
+function registrarVistos() {
+  const ahora = Date.now(); let cambio = false;
+  datos.resultados.forEach(r => { const k = idDe(r); if (!vistos[k]) { vistos[k] = ahora; cambio = true; } });
+  // Se guardan solo los ids vigentes de los ultimos 45 dias para que la lista no crezca sin fin.
+  if (cambio) {
+    const limite = ahora - 45 * 86400000;
+    Object.keys(vistos).forEach(k => { if (vistos[k] < limite) delete vistos[k]; });
+    try { localStorage.setItem(vistosClave, JSON.stringify(vistos)); } catch (_) {}
+  }
+  // La ultima visita se anota al salir de la pestaña (no en cada dibujo): asi una segunda pestaña no la pisa.
+  // Solo la primera vez se anota aqui, para que la proxima sesion tenga un corte.
+  try { if (!localStorage.getItem(visitaClave)) localStorage.setItem(visitaClave, String(ahora)); } catch (_) {}
+}
+// Nueva = la vio por primera vez despues de su ultima visita Y se publico hace poco. Lo segundo evita que, al
+// ampliar el periodo a 30 dias, procesos de hace semanas aparezcan como «nuevos» solo porque no estaban cargados.
+const fechaLocal = (ms) => { const d = new Date(ms); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const esNueva = (r) => corteVisita > 0 && (vistos[idDe(r)] || 0) > corteVisita && !estadoDe(r)
+  && (r.fecha_publicacion || '') >= fechaLocal(corteVisita - 2 * 86400000);
+const anotarVisita = () => { try { localStorage.setItem(visitaClave, String(Date.now())); } catch (_) {} };
+document.addEventListener('visibilitychange', () => { if (document.hidden) anotarVisita(); });
+addEventListener('pagehide', anotarVisita);
+
+const VISTAS = [['pendientes', 'Sin decidir', r => !estadoDe(r)], ['interesa', 'Me interesan', r => estadoDe(r) === 'interesa'],
+                ['descarta', 'Descartadas', r => estadoDe(r) === 'descarta'], ['todas', 'Todas', () => true]];
+
+// «Me interesan» no depende del periodo ni de la pestaña: muestra lo marcado entre los ultimos 30 dias, sea
+// del Radar o de Por revisar. Mientras llega la consulta de 30 dias se usa la del periodo elegido.
+let datos30 = null;
+const amplia = () => (datos30 || datos).resultados;
+async function cargarAmplia() {
+  if (+$('dias').value === 30) { datos30 = datos; return; }
+  try {
+    const r = await fetch('/api/alertas?dias=30'); if (!r.ok) return;
+    const j = await r.json(); if (!datos) return;
+    datos30 = j; ver === 'interesa' ? pintar() : pintarConteos();
+  } catch (_) {}
+}
+function filtrar(conDecision = true, vista = ver) {
+  const q = $('q').value.trim().toLowerCase(), dep = $('dep').value;
+  const dv = VISTAS.find(v => v[0] === vista)[2];
+  const lista = (vista === 'interesa' ? amplia() : base()).filter(r =>
+    (!conDecision || dv(r)) &&
+    (!dep || r.departamento === dep) &&
+    (!$('renov').value || r.renovacion) &&
+    ($('novedad').value !== 'nuevas' || esNueva(r)) &&
+    ($('equipo').value === 'marcadas' ? !!equipoMarcas[idDe(r)] : $('equipo').value === 'libres' ? !equipoMarcas[idDe(r)] : true) &&
+    (!q || (r.entidad + ' ' + r.descripcion + ' ' + r.coincidencias.join(' ')).toLowerCase().includes(q)));
+  // Los que no publican valor van siempre al final, sea cual sea el sentido.
+  const sinValor = (a, b) => (!a.valor_cop) - (!b.valor_cop);
+  const reciente = (a, b) => (b.fecha_publicacion || '').localeCompare(a.fecha_publicacion || '');
+  const ordenes = {
+    puntaje: (a, b) => b.puntaje - a.puntaje || reciente(a, b),
+    puntaje_asc: (a, b) => a.puntaje - b.puntaje || reciente(a, b),
+    valor: (a, b) => sinValor(a, b) || (b.valor_cop - a.valor_cop) || b.puntaje - a.puntaje,
+    valor_asc: (a, b) => sinValor(a, b) || (a.valor_cop - b.valor_cop) || b.puntaje - a.puntaje,
+    recientes: (a, b) => reciente(a, b) || b.puntaje - a.puntaje
+  };
+  lista.sort(ordenes[orden] || ordenes.puntaje);
+  return lista;
+}
+
+// Cuantos proveedores suelen presentarse (procesos ya cerrados de los ultimos 12 meses).
+const numEs = (x) => x.toLocaleString('es-CO', { maximumFractionDigits: 1 });
+function textoCompetencia(c) {
+  return `en promedio ${numEs(c.promedio)} ${c.promedio === 1 ? 'proveedor' : 'proveedores'} por proceso (${plural(c.n, 'proceso cerrado', 'procesos cerrados')}${c.desiertos ? `, ${plural(c.desiertos, 'sin ninguna respuesta', 'sin ninguna respuesta')}` : ''})`;
+}
+function competenciaDe(c) {
+  const p = el('p', 'hist');
+  if (!c) { p.hidden = true; return p; }
+  p.append(el('b', '', c.alcance === 'entidad' ? 'Competencia en procesos anteriores de esta entidad: ' : 'Competencia habitual en este producto (la entidad no tiene procesos cerrados de lo mismo): '),
+    document.createTextNode(textoCompetencia(c) + (c.n < 3 ? '. Son pocos procesos: tómelo con cuidado.' : '.')));
+  return p;
+}
+
+// La entidad ya tenia un contrato de lo mismo: este proceso puede ser su renovacion.
+function renovacionDe(v) {
+  const p = el('p', 'renov-caja');
+  const fecha = new Date(v.fin + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+  const cuando = v.dias === null ? `terminó el ${fecha}` : v.dias < 0 ? `terminó el ${fecha} (hace ${plural(-v.dias, 'día', 'días')})` : v.dias === 0 ? 'termina hoy' : `termina el ${fecha} (en ${plural(v.dias, 'día', 'días')})`;
+  p.append(el('b', '', 'Posible renovación: '),
+    document.createTextNode(`esta entidad tenía un contrato de lo mismo (${v.terminos.join(', ')}) con ${v.proveedor || 'un proveedor no publicado'}, que ${cuando}${v.valor ? ` por ${pesos(v.valor)}` : ''}. Este proceso puede ser su reemplazo: vale la pena mirarlo con prioridad.`));
+  return p;
+}
+
+// Lo que la entidad ya contrato de este tipo en el ultimo ano (contratos firmados en SECOP II).
+function historialDe(r) {
+  const h = r.historial, p = el('p', 'hist');
+  if (h) {
+    p.append(el('b', '', 'Historial, últimos 12 meses: '),
+      document.createTextNode(`${plural(h.n, 'contrato parecido', 'contratos parecidos')}, ${pesos(h.total)} en total${h.mediana ? `, valor típico ${pesos(h.mediana)}` : ''}. `));
+    if (h.proveedores.length) p.append(document.createTextNode('Le contrató a: ' + h.proveedores.map(x => `${x.nombre} (${x.n})`).join(', ') + '.'));
+  } else if (datos && datos.mercado && datos.mercado.listo) {
+    p.classList.add('nd');
+    p.textContent = 'Historial: no encontramos contratos parecidos de esta entidad en los últimos 12 meses.';
+  } else { p.hidden = true; }
+  return p;
+}
+
+function tarjeta(r) {
+  const li = el('li', 'card' + (estadoDe(r) === 'descarta' ? ' descartada' : ''));
+  li.dataset.id = idDe(r);
+  const sc = el('div', 'score');
+  sc.append(el('b', '', String(r.puntaje)), el('small', '', 'de 100'));
+  const bar = el('div', 'bar'); const i = el('i'); i.style.width = r.puntaje + '%'; bar.append(i); sc.append(bar);
+
+  const body = el('div');
+  const top = el('div', 'top');
+  { const c = el('span', 'chip ' + r.nivel, NIVEL[r.nivel] || r.nivel); c.title = AYUDA_NIVEL[r.nivel] || ''; top.append(c); }
+  if (r.renovacion) { const c = el('span', 'chip renov', 'Posible renovación'); c.title = 'Esta entidad ya tenía un contrato de lo mismo que terminó hace poco o termina pronto. Este proceso puede ser su reemplazo.'; top.append(c); }
+  if (r.requiere_aliado) { const c = el('span', 'chip aliado', 'Requiere aliado'); c.title = 'Obra con montaje: Electroriente suministra, pero instalar requiere un aliado (unión temporal o consorcio).'; top.append(c); }
+  if (esNueva(r)) { const c = el('span', 'chip nueva', 'Nueva'); c.title = 'Apareció después de su última visita.'; top.append(c); }
+  if (estadoDe(r) === 'interesa') top.append(el('span', 'chip ok', 'Me interesa'));
+  const cabeza = el('div', 'cabeza');
+  const valor = el('div', 'valor');
+  const v = el('strong', r.valor_cop ? '' : 'nulo', pesos(r.valor_cop));
+  valor.append(v, el('small', '', antiguedad(r.fecha_publicacion)), cierre(r.fecha_cierre), respondieron(r.respondieron));
+  cabeza.append(el('h2', '', r.entidad || 'Entidad sin nombre'), valor);
+  body.append(top, cabeza);
+  const meta = el('div', 'meta');
+  const m = (ic, t) => { const s = el('span'); s.append(svg(ic), document.createTextNode(t)); return s; };
+  meta.append(m('pin', r.departamento || 'Sin departamento'), m('doc', r.modalidad || '—'));
+  const largo = (r.descripcion || '').length > 170;
+  const desc = el('p', 'desc' + (largo ? ' corto' : ''), r.descripcion);
+  body.append(meta, desc);
+  if (largo) {
+    const mas = el('button', 'link mini', 'Ver más'); mas.type = 'button'; mas.setAttribute('aria-expanded', 'false');
+    mas.onclick = () => { const a = desc.classList.toggle('corto'); mas.textContent = a ? 'Ver más' : 'Ver menos'; mas.setAttribute('aria-expanded', String(!a)); };
+    body.append(mas);
+  }
+
+  const chips = el('div', 'chips');
+  chips.append(el('span', 'why', 'Coincide por:'));
+  r.coincidencias.slice(0, 8).forEach(c => chips.append(el('span', 'chip', c)));
+  if (r.coincidencias.length > 8) chips.append(el('span', 'chip nota', `+${r.coincidencias.length - 8}`));
+  body.append(chips);
+  if (r.notas.length) {
+    const n = el('div', 'chips');
+    r.notas.forEach(t => n.append(el('span', 'chip nota', t)));
+    body.append(n);
+  }
+
+  if (r.renovacion) body.append(renovacionDe(r.renovacion));
+  body.append(historialDe(r), competenciaDe(r.competencia));
+
+  const acc = el('div', 'acciones');
+  const marcar = (valor, texto, cls) => {
+    const b = el('button', 'dec ' + cls, texto); b.type = 'button';
+    b.setAttribute('aria-pressed', String(estadoDe(r) === valor));
+    b.onclick = () => {
+      const antes = estadoDe(r), nuevo = antes === valor ? '' : valor;
+      decidir(r, nuevo);
+      if (ver !== 'todas' && ver !== (nuevo || 'pendientes')) { const fila = filaHecha(r, nuevo, antes); li.replaceWith(fila); pintarConteos(); fila.querySelector('button').focus(); }
+      else { pintar(); }
+    };
+    return b;
+  };
+  acc.append(marcar('interesa', 'Me interesa', 'si'), marcar('descarta', 'Descartar', 'no'), el('span', 'sp'));
+  if (r.url) {
+    const a = el('a', 'go'); a.href = r.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.append(document.createTextNode('Abrir en SECOP'), svg('ext'));
+    acc.append(a);
+  }
+  const marca = equipoMarcas[idDe(r)];
+  if (marca) body.append(lineaEquipo(marca));
+  const dEq = equipoDescartes[idDe(r)], lineaD = dEq && lineaDescartes(dEq);
+  if (lineaD) body.append(lineaD);
+  body.append(acc);
+  li.append(sc, body);
+  return li;
+}
+
+// Tras decidir, la tarjeta no desaparece de golpe: deja una fila con "Deshacer".
+function filaHecha(r, nuevo, antes) {
+  const li = el('li', 'hecho');
+  li.append(el('span', '', nuevo === 'interesa' ? 'Guardada en Me interesan:' : nuevo === 'descarta' ? 'Descartada:' : 'Vuelve a Sin decidir:'),
+            el('strong', '', r.entidad || 'Entidad sin nombre'));
+  const u = el('button', 'link', 'Deshacer'); u.type = 'button';
+  u.onclick = () => {
+    decidir(r, antes); pintar();
+    // La lista se redibuja: el foco vuelve a la tarjeta restaurada (o, si no esta a la vista, al selector).
+    const tarjeta = [...$('lista').querySelectorAll('.card')].find(c => c.dataset.id === idDe(r));
+    (tarjeta ? tarjeta.querySelector('.dec') : $('seg').querySelector('[aria-pressed=true]')).focus();
+  };
+  li.append(u);
+  return li;
+}
+
+function pintarConteos() {
+  if (!datos) return;
+  const previa = filtrar(false);
+  $('seg').replaceChildren(...VISTAS.map(([id, texto, fn]) => {
+    const b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', String(ver === id));
+    const n = (id === 'interesa' ? filtrar(false, 'interesa') : previa).filter(fn).length;
+    b.setAttribute('aria-label', `${texto}, ${n}`);
+    b.append(document.createTextNode(texto), el('b', '', String(n)));
+    b.onclick = () => { ver = id; mostrados = PAGINA; animar = true; pintar(); };
+    return b;
+  }));
+}
+
+function pintar() {
+  if (!datos) return;
+  registrarVistos();
+  const f = filtrar(), lista = $('lista');
+  pintarConteos();
+  const total = base().length;
+  $('cuenta').textContent = ver === 'interesa'
+    ? `${plural(f.length, 'marcada', 'marcadas')} · de los últimos 30 días, sea cual sea el periodo elegido`
+    : `${f.length.toLocaleString('es-CO')} de ${plural(total, 'proceso', 'procesos')}`;
+  if (!f.length) {
+    const st = el('li', 'state');
+    const sinPendientes = ver === 'pendientes' && total && !filtrar(false).filter(VISTAS[0][2]).length && filtrar(false).length;
+    st.append(svg('search'), el('h2', '', sinPendientes ? 'Todo decidido por ahora' : ver === 'interesa' ? 'Aún no ha marcado ninguna' : ver === 'descarta' ? 'No hay descartadas' : 'Sin alertas con estos filtros'),
+      el('p', '', sinPendientes ? 'No quedan procesos sin decidir con estos filtros. Mire "Me interesan" o cambie el periodo.'
+        : ver === 'interesa' ? 'Use "Me interesa" en una tarjeta para guardarla aquí.'
+        : ver === 'descarta' ? 'Las tarjetas que descarte quedan aquí por si cambia de opinión.'
+        : total
+        ? 'Quite algún filtro para ver más resultados.'
+        : modo === 'radar' ? `Ningún proceso llegó a los ${datos.umbral} puntos que se necesitan para avisarle. Pruebe un periodo más largo o revise config/filtros.yaml.` : 'No hay procesos en esta vista para el periodo elegido. Pruebe un periodo más largo.'));
+    lista.replaceChildren(st);
+    return;
+  }
+  const visibles = f.slice(0, mostrados);
+  lista.classList.toggle('anim', animar); animar = false;
+  const nodos = visibles.map(tarjeta);
+  if (f.length > visibles.length) {
+    const li = el('li', 'mas'); const b = el('button', 'btn ghost', `Mostrar ${Math.min(PAGINA, f.length - visibles.length)} más (quedan ${(f.length - visibles.length).toLocaleString('es-CO')})`);
+    b.type = 'button'; b.onclick = () => { mostrados += PAGINA; pintar(); };
+    li.append(b); nodos.push(li);
+  }
+  lista.replaceChildren(...nodos);
+}
+
+const NIVEL = { alta: 'Factibilidad alta', media: 'Factibilidad media', revisar: 'Por revisar' };
+const AYUDA_NIVEL = { alta: 'Qué tan probable es que Electroriente pueda suministrarlo: alta.', media: 'Qué tan probable es que Electroriente pueda suministrarlo: media.', revisar: 'Señal débil: no llega al puntaje de alerta, pero podría servir.' };
+const ESTADO = {
+  falta: ['chip sm sin', 'Falta'], listo: ['chip sm ok', 'Cargado'],
+  por_vencer: ['chip sm aviso', 'Vence pronto'], vencido: ['chip sm sin', 'Vencido']
+};
+let docs = null, alertasViejas = false;
+const API_POST = { 'X-Panel': '1' };
+
+async function cargarDocs() {
+  const cont = $('docs-lista');
+  cont.replaceChildren(...esqueletos('div'));
+  try {
+    const r = await fetch('/api/documentos');
+    if (!r.ok) throw new Error('No se pudo leer la lista de documentos');
+    docs = await r.json();
+    pintarDocs();
+  } catch (e) {
+    const st = el('div', 'state');
+    st.append(svg('alert'), el('h2', '', 'No se pudo cargar la lista'), el('p', '', e.message));
+    const b = el('button', 'btn', 'Reintentar'); b.type = 'button'; b.onclick = cargarDocs;
+    st.append(b); cont.replaceChildren(st);
+  }
+}
+
+const tam = (b) => b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB';
+
+async function subir(d, file, vence, msg) {
+  msg.textContent = '';
+  try {
+    const r = await fetch('/api/subir?doc=' + encodeURIComponent(d.id), {
+      method: 'POST', body: file,
+      headers: { ...API_POST, 'Content-Type': 'application/octet-stream',
+                 'X-Nombre': encodeURIComponent(file.name), 'X-Vence': vence }
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'No se pudo subir el archivo');
+    alertasViejas = true;
+    await cargarDocs();
+  } catch (e) { msg.textContent = e.message; }
+}
+
+async function quitar(a) {
+  if (!confirm(`¿Quitar "${a.original}"? Se borra del computador.`)) return;
+  await fetch('/api/eliminar?id=' + a.id, { method: 'POST', headers: API_POST });
+  alertasViejas = true;
+  cargarDocs();
+}
+
+function filaDoc(d) {
+  const li = el('li', 'doc');
+  const h = el('h3'); h.append(el('span', '', d.nombre));
+  const [cls, txt] = ESTADO[d.estado]; h.append(el('span', cls, txt));
+  li.append(h, el('p', 'para', d.para_que), el('p', 'datos', `Lo emite: ${d.emite}. Vigencia: ${d.vigencia}.`));
+
+  if (estatico) {
+    // Web compartida: solo estado. Los archivos no viajan, ni siquiera sus nombres.
+    if (d.archivos.length) {
+      const ul = el('ul', 'arch');
+      d.archivos.forEach(a => {
+        const f = el('li');
+        f.append(el('span', 'fin', a.vence ? `Vence ${a.vence}` : 'Sin fecha de vencimiento'));
+        if (a.estado === 'vencido' || a.estado === 'por_vencer') f.append(el('span', ESTADO[a.estado][0], ESTADO[a.estado][1]));
+        ul.append(f);
+      });
+      li.append(ul);
+    }
+    return li;
+  }
+
+  if (d.archivos.length) {
+    const ul = el('ul', 'arch');
+    d.archivos.forEach(a => {
+      const f = el('li');
+      f.append(el('span', 'nom', a.original),
+        el('span', 'fin', `${tam(a.bytes)} · subido ${a.subido}` + (a.vence ? ` · vence ${a.vence}` : '')));
+      if (a.estado === 'vencido' || a.estado === 'por_vencer') f.append(el('span', ESTADO[a.estado][0], ESTADO[a.estado][1]));
+      const dl = el('a', 'go', 'Descargar'); dl.href = '/api/archivo?id=' + a.id;
+      const rm = el('button', 'link peligro', 'Quitar'); rm.type = 'button'; rm.onclick = () => quitar(a);
+      f.append(dl, rm); ul.append(f);
+    });
+    li.append(ul);
+  }
+
+  const fila = el('div', 'subir');
+  const lf = el('label', 'f', 'Vence (opcional)');
+  const fecha = el('input'); fecha.type = 'date'; lf.append(fecha);
+  const input = el('input'); input.type = 'file'; input.hidden = true;
+  input.accept = '.pdf,.png,.jpg,.jpeg,.docx,.xlsx';
+  const msg = el('p', 'err'); msg.setAttribute('role', 'alert');
+  const btn = el('button', 'btn ghost', d.archivos.length ? 'Subir otro archivo' : 'Subir archivo'); btn.type = 'button';
+  btn.onclick = () => input.click();
+  input.onchange = () => { if (input.files[0]) subir(d, input.files[0], fecha.value, msg); };
+  fila.append(lf, btn, input);
+  li.append(fila, msg);
+  return li;
+}
+
+function pintarDocs() {
+  if (!docs) return;
+  const todos = docs.flatMap(c => c.documentos);
+  const hechos = todos.filter(d => d.estado === 'listo' || d.estado === 'por_vencer').length;
+  const n = el('div', 'n', String(hechos));
+  n.append(el('small', '', ` de ${todos.length} documentos con archivo vigente`));
+  const bar = el('div', 'bar'), i = el('i'); i.style.width = (todos.length ? hechos / todos.length * 100 : 0) + '%';
+  bar.append(i); $('docs-prog').replaceChildren(n, bar);
+
+  const soloFaltan = $('soloFaltan').checked;
+  const grupos = docs.map(c => {
+    const items = c.documentos.filter(d => (!soloFaltan || d.estado === 'falta' || d.estado === 'vencido'));
+    if (!items.length) return null;
+    const g = el('section', 'grupo');
+    g.append(el('h2', '', c.titulo), el('p', '', c.descripcion));
+    const ul = el('ul', 'docs'); items.forEach(d => ul.append(filaDoc(d)));
+    g.append(ul);
+    return g;
+  }).filter(Boolean);
+  $('docs-lista').replaceChildren(...(grupos.length ? grupos : [el('p', 'nota-doc', 'No hay documentos con este filtro.')]));
+}
+
+const ESTADO_CRIT = { activo: ['chip sm ok', 'Activo'], supuesto: ['chip sm aviso', 'Supuesto a validar'],
+  sin_datos: ['chip sm nota', 'No está en los datos'], pendiente: ['chip sm sin', 'Pendiente'] };
+let critListo = false;
+async function cargarCrit() {
+  const c = $('crit-cuerpo');
+  c.replaceChildren(...esqueletos('div'));
+  try {
+    const r = await fetch('/api/criterios'); if (!r.ok) throw new Error('No se pudieron leer los criterios');
+    const d = await r.json(); critListo = true;
+    const sec = (id, t, meta) => { const g = el('section', 'crit-sec'); g.id = id; const h = el('h2', '', t); if (meta) h.append(el('small', '', meta)); g.append(h); return g; };
+    const pts = (n) => el('span', 'pts ' + (n >= 0 ? 'mas' : 'menos'), (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n));
+    const tarjeta = (cls, n, titulo, nota) => { const t = el('div', 'cal-card ' + cls); const h = el('h3'); if (n) h.append(el('span', 'cal-n', n)); h.append(document.createTextNode(titulo)); if (nota) h.append(el('small', '', nota)); t.append(h); return t; };
+    const { alta, media } = d.niveles, revisar = d.puntaje.umbral_revisar;
+
+    // ---- 1. Como se califica ----
+    const g0 = sec('crit-calif', 'Cómo se califica una licitación', 'Puntaje de 0 a 100');
+    const cal = el('div', 'cal');
+    const c1 = tarjeta('a-fam', '1', 'Qué compra la entidad');
+    const maxPeso = Math.max(...d.grupos.map(g => g.peso));
+    d.grupos.forEach(g => { const f = el('div', 'fam'); f.append(el('span', '', g.etiqueta), el('i'), el('b', '', g.peso)); f.children[1].style.setProperty('--w', Math.round(g.peso / maxPeso * 100) + '%'); c1.append(f); });
+    c1.append(el('p', 'cal-pie', 'Cada familia suma su peso una sola vez.'));
+    const c2 = tarjeta('a-aj', '2', 'Lo que sube o baja el puntaje');
+    d.ajustes.forEach(a => { const row = el('div', 'aj'); row.append(pts(a.puntos), el('span', '', a.texto)); if (a.nota) row.append(el('small', '', a.nota)); c2.append(row); });
+    const c3 = tarjeta('a-niv', '3', 'En qué nivel cae');
+    const esc = el('div', 'escala'); esc.setAttribute('role', 'img'); esc.setAttribute('aria-label', `Escala de 0 a 100: sin mostrar hasta ${revisar - 1}, por revisar de ${revisar} a ${media - 1}, media de ${media} a ${alta - 1}, alta desde ${alta}`);
+    [[revisar, 'e0'], [media - revisar, 'e1'], [alta - media, 'e2'], [100 - alta, 'e3']].forEach(([w, k]) => { const x = el('span', k); x.style.width = w + '%'; esc.append(x); });
+    const marcas = el('div', 'marcas'); marcas.setAttribute('aria-hidden', 'true');
+    [[0, '0'], [media, media], [alta, alta], [100, '100']].forEach(([p, t]) => { const m = el('span', '', String(t)); m.style.left = p + '%'; marcas.append(m); });
+    c3.append(esc, marcas);
+    [[`Alta · desde ${alta}`, 'chip alta', 'Entra al Radar y avisa en la campana'],
+     [`Media · desde ${media}`, 'chip media', 'Entra al Radar'],
+     [`Por revisar · ${revisar} a ${media - 1}`, 'chip revisar', 'Solo en la pestaña «Por revisar»'],
+     [`Menos de ${revisar}`, 'chip nota', 'No se muestra']].forEach(([t, k, nota]) => { const n = el('div', 'niv'); n.append(el('span', k + ' sm', t), el('span', '', nota)); c3.append(n); });
+    const pd = el('div', 'panel-suave a-des'); pd.append(el('h3', '', 'Se descarta antes de puntuar'));
+    const ul = el('ul'); (d.descarte || []).forEach(t => ul.append(el('li', '', t))); pd.append(ul);
+    const pe = el('div', 'panel-suave ejemplo a-eje'); pe.append(el('h3', '', 'Ejemplo'));
+    pe.append(el('p', 'obj', `Entidad de Santander: «suministro de ${d.ejemplo.objeto}», compraventa, mínima cuantía.`));
+    d.ejemplo.lineas.forEach(l => { const ln = el('div', 'linea'); ln.append(el('span', '', l.texto), pts(l.puntos)); pe.append(ln); });
+    const tot = el('div', 'total'); tot.append(el('span', '', `Total · factibilidad ${d.ejemplo.nivel}`), el('b', '', String(d.ejemplo.total))); pe.append(tot);
+    const izq = el('div', 'a-izq'); izq.append(c1, c3);
+    cal.append(izq, c2, pd, pe);
+    g0.append(cal);
+
+    // ---- 2. Que se evalua ----
+    const g1 = sec('crit-eval', 'Qué se evalúa');
+    const tabla = el('div', 'crit-tabla');
+    const cab = el('div', 'crit-fila cab'); ['Criterio', 'Cómo se aplica', 'Por qué importa'].forEach(t => cab.append(el('span', '', t))); tabla.append(cab);
+    d.criterios.forEach(x => {
+      const fila = el('div', 'crit-fila');
+      const c1 = el('div'); c1.append(el('h3', '', x.titulo)); const e = ESTADO_CRIT[x.estado]; if (e) c1.append(el('span', e[0], e[1]));
+      const c2 = el('div'); c2.append(el('p', '', x.como));
+      if (x.detalles && x.detalles.length) { const u = el('ul'); x.detalles.forEach(t => u.append(el('li', '', t))); c2.append(u); }
+      const c3 = el('div', 'por', x.por_que); c3.dataset.et = 'Por qué importa';
+      fila.append(c1, c2, c3); tabla.append(fila);
+    });
+    g1.append(tabla);
+
+    // ---- 3. Terminos ----
+    const g2 = sec('crit-terminos', 'Términos de búsqueda', d.base ? `Última consulta ${d.base.generado} · ${d.base.candidatos} candidatos · el número es en cuántos acertó` : 'Abra el Radar para ver cuántas veces acierta cada término');
+    const rej = el('div', 'terms-grid');
+    d.grupos.forEach(g => {
+      const caja = el('div', 'fam-terms'); const hd = el('header'); hd.append(el('h3', '', g.etiqueta), el('span', 'pts mas', g.peso + ' puntos'));
+      const w = el('div', 'terms');
+      g.terminos.forEach(t => w.append(el('span', 'term' + (t.n ? ' hit' : ''), t.t + (t.n ? ' · ' + t.n : ''))));
+      caja.append(hd, w); rej.append(caja);
+    });
+    g2.append(rej);
+    const det = el('details', 'ruido'); const sm = el('summary'); sm.append(el('span', '', 'Términos que sacan un proceso (ruido)'), el('span', 'pts menos', String(d.excluir.length)));
+    const wx = el('div', 'terms'); d.excluir.forEach(t => wx.append(el('span', 'term out', t))); det.append(sm, wx); g2.append(det);
+
+    // ---- 4. Revision semanal ----
+    const g3 = sec('crit-revision', 'Revisión semanal');
+    const ol = el('ol', 'pasos'); d.revision.forEach(t => ol.append(el('li', '', t))); g3.append(ol);
+
+    // ---- Atajos ----
+    const nav = el('nav', 'crit-nav'); nav.setAttribute('aria-label', 'Ir a una parte de Criterios');
+    [['crit-calif', 'Cómo se califica'], ['crit-eval', 'Qué se evalúa'], ['crit-terminos', 'Términos de búsqueda'], ['crit-revision', 'Revisión semanal']].forEach(([id, t]) => {
+      const b = el('button', '', t); b.type = 'button'; b.onclick = () => $(id).scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); nav.append(b);
+    });
+    c.replaceChildren(nav, g0, g1, g2, g3);
+  } catch (e) {
+    const st = el('div', 'state'); st.append(svg('alert'), el('h2', '', 'No se pudo cargar'), el('p', '', e.message));
+    const b = el('button', 'btn', 'Reintentar'); b.type = 'button'; b.onclick = cargarCrit; st.append(b); c.replaceChildren(st);
+  }
+}
+
+// ---- Oportunidades futuras (contratos que terminan pronto)
+let venc = null, vencTimer = null, vencVistos = PAGINA;
+function cargarVenc() {
+  clearTimeout(vencTimer);
+  if (!venc) $('vlista').replaceChildren(...esqueletos());
+  fetch('/api/vencimientos').then(r => r.json()).then(d => {
+    venc = d;
+    const deps = [...new Set(d.contratos.map(c => c.departamento).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es'));
+    const sel = $('vdep'), actual = sel.value;
+    sel.replaceChildren(new Option('Todos', ''), ...deps.map(x => new Option(x, x)));
+    sel.value = deps.includes(actual) ? actual : '';
+    pintarVenc();
+    if (d.estado.calculando && !$('vista-venc').hidden) vencTimer = setTimeout(cargarVenc, 5000);
+  }).catch(() => { venc = { error: true }; pintarVenc(); });
+}
+function estadoVacio(titulo, texto, reintentar) {
+  const st = el('li', 'state'); st.append(el('h2', '', titulo), el('p', '', texto));
+  if (reintentar) { const b = el('button', 'btn', 'Reintentar'); b.type = 'button'; b.onclick = reintentar; st.append(b); }
+  return st;
+}
+// Estructura de carga: bloques con la forma del contenido final y un aviso «Cargando…» solo para lectores de pantalla.
+function esqueletos(etiqueta = 'li', n = 3) {
+  const aviso = el(etiqueta, 'solo-lectores', 'Cargando…'); aviso.setAttribute('role', 'status');
+  return [aviso, ...Array.from({ length: n }, () => { const b = el(etiqueta, 'skel'); b.setAttribute('aria-hidden', 'true'); return b; })];
+}
+function tarjetaVenc(c) {
+  const li = el('li', 'card');
+  const sc = el('div', 'score');
+  sc.append(el('b', '', String(c.dias)), el('small', '', c.dias === 1 ? 'día' : 'días'));
+  const body = el('div');
+  const cabeza = el('div', 'cabeza');
+  const valor = el('div', 'valor');
+  valor.append(el('strong', c.valor ? '' : 'nulo', pesos(c.valor)));
+  const fin = new Date(c.fin + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+  valor.append(el('small', 'cierre', `Termina ${fin}`));
+  cabeza.append(el('h2', '', c.entidad || 'Entidad sin nombre'), valor);
+  const meta = el('div', 'meta');
+  const m = (ic, t) => { const s = el('span'); s.append(svg(ic), document.createTextNode(t)); return s; };
+  meta.append(m('pin', c.departamento || 'Sin departamento'), m('doc', c.tipo || '—'));
+  const largo = (c.objeto || '').length > 170;
+  const desc = el('p', 'desc' + (largo ? ' corto' : ''), c.objeto);
+  body.append(cabeza, meta, desc);
+  if (largo) {
+    const mas = el('button', 'link mini', 'Ver más'); mas.type = 'button'; mas.setAttribute('aria-expanded', 'false');
+    mas.onclick = () => { const a = desc.classList.toggle('corto'); mas.textContent = a ? 'Ver más' : 'Ver menos'; mas.setAttribute('aria-expanded', String(!a)); };
+    body.append(mas);
+  }
+  const p = el('p', 'hist'); p.append(el('b', '', 'Proveedor actual: '), document.createTextNode(c.proveedor || 'proveedor no publicado'));
+  body.append(p);
+  const chips = el('div', 'chips');
+  chips.append(el('span', 'why', 'Coincide por:'));
+  c.coincidencias.slice(0, 6).forEach(t => chips.append(el('span', 'chip', t)));
+  body.append(chips);
+  if (c.url) {
+    const acc = el('div', 'acciones');
+    const a = el('a', 'go'); a.href = c.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.append(document.createTextNode('Ver contrato en SECOP'), svg('ext'));
+    acc.append(a); body.append(acc);
+  }
+  li.append(sc, body);
+  return li;
+}
+function pintarVenc() {
+  const lista = $('vlista');
+  if (!venc) return;
+  if (venc.error) { lista.replaceChildren(estadoVacio('No se pudo cargar', 'Revise la conexión e intente de nuevo.', cargarVenc)); $('vcuenta').textContent = ''; return; }
+  const e = venc.estado;
+  if (!e.listo) {
+    $('vcuenta').textContent = '';
+    lista.replaceChildren(e.error
+      ? estadoVacio('No se pudo consultar SECOP', e.error + ' Vuelva a abrir esta pestaña en unos minutos.')
+      : estadoVacio('Consultando contratos en SECOP…', 'La primera vez tarda un par de minutos. Esta pantalla se actualiza sola.'));
+    return;
+  }
+  const q = radarNorm($('vq').value), dep = $('vdep').value, dias = Number($('vdias').value), soloAfin = $('vtipo').value === 'afin';
+  const f = venc.contratos.filter(c => c.dias <= dias && (!soloAfin || c.afin) && (!dep || c.departamento === dep) &&
+    (!q || radarNorm(c.entidad + ' ' + c.objeto + ' ' + c.proveedor).includes(q)));
+  $('vcuenta').textContent = `${f.length.toLocaleString('es-CO')} contratos que terminan pronto` + (e.calculando ? ' · actualizando datos…' : ` · datos de ${e.generado}`);
+  if (!f.length) { lista.replaceChildren(estadoVacio('Sin contratos con estos filtros', 'Pruebe un plazo más largo o quite algún filtro.')); return; }
+  const filas = f.slice(0, vencVistos).map(tarjetaVenc);
+  if (f.length > vencVistos) {
+    const li = el('li', 'mas'); const b = el('button', 'btn ghost', `Mostrar ${Math.min(PAGINA, f.length - vencVistos)} más (quedan ${(f.length - vencVistos).toLocaleString('es-CO')})`);
+    b.type = 'button'; b.onclick = () => { vencVistos += PAGINA; pintarVenc(); }; li.append(b); filas.push(li);
+  }
+  lista.replaceChildren(...filas);
+}
+const radarNorm = (t) => (t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+['vq', 'vdep', 'vdias', 'vtipo'].forEach(id => $(id).addEventListener('input', () => { vencVistos = PAGINA; pintarVenc(); }));
+
+// ---- Mercado: quien gana, cuanto se paga, que entidades compran, donde hay menos competencia
+let mer = null, merTimer = null, merVer = 'ganadores', merVistos = PAGINA;
+const MER_VISTAS = [['ganadores', 'Ganadores'], ['entidades', 'Entidades'], ['regiones', 'Regiones'], ['productos', 'Productos']];
+function cargarMer() {
+  clearTimeout(merTimer);
+  if (!mer) $('mlista').replaceChildren(...esqueletos());
+  fetch('/api/mercado').then(r => r.json()).then(d => {
+    mer = d;
+    const llenar = (id, valores, todos) => {
+      const sel = $(id), actual = sel.value;
+      sel.replaceChildren(new Option(todos, ''), ...valores.map(x => new Option(x, x)));
+      sel.value = valores.includes(actual) ? actual : '';
+    };
+    llenar('mdep', [...new Set(d.contratos.map(c => c.departamento).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')), 'Todos');
+    const frec = {}; d.contratos.forEach(c => c.coincidencias.forEach(t => { frec[t] = (frec[t] || 0) + 1; }));
+    llenar('mprod', Object.keys(frec).sort((a, b) => frec[b] - frec[a]), 'Todos');
+    pintarMer();
+    if (d.estado.calculando && !$('vista-mer').hidden) merTimer = setTimeout(cargarMer, 5000);
+  }).catch(() => { mer = { error: true }; pintarMer(); });
+}
+// Estado de un contrato. Las entidades no siempre cierran el contrato en SECOP:
+// si el plazo ya paso pero sigue "en ejecucion", se dice tal cual.
+function estadoContrato(c) {
+  const hoy = new Date().toISOString().slice(0, 10);
+  const est = (c.estado || '').toLowerCase();
+  const fin = c.fin ? new Date(c.fin + 'T00:00:00').toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+  if (/terminad|cerrad|liquidad/.test(est)) return { id: 'fin', texto: `Finalizado${fin ? ' el ' + fin : ''}` };
+  if (c.fin && c.fin < hoy) return { id: 'fin', texto: `Plazo cumplido el ${fin}, SECOP aún no lo marca como terminado${/modificad/.test(est) ? ' (fue modificado: puede haberse prorrogado)' : ''}` };
+  return { id: 'act', texto: c.fin ? `Activo hasta el ${fin}` : 'Activo, sin fecha de fin publicada' };
+}
+const mMediana = (a) => { const s = a.filter(x => x > 0).sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
+const mCuartil = (a, q) => { const s = a.filter(x => x > 0).sort((x, y) => x - y); return s.length ? s[Math.floor((s.length - 1) * q)] : 0; };
+const mTop = (lista, campo, max) => {
+  const cuenta = {}; lista.forEach(c => { if (c[campo]) cuenta[c[campo]] = (cuenta[c[campo]] || 0) + 1; });
+  return Object.entries(cuenta).sort((a, b) => b[1] - a[1]).slice(0, max);
+};
+function agruparMer(lista, vista) {
+  const grupos = new Map();
+  const meter = (clave, nombre, c) => {
+    if (!clave) return;
+    let g = grupos.get(clave); if (!g) { g = { nombre, contratos: [] }; grupos.set(clave, g); }
+    g.contratos.push(c);
+  };
+  lista.forEach(c => {
+    if (vista === 'ganadores') meter(c.nit || radarNorm(c.proveedor), c.proveedor, c);
+    else if (vista === 'entidades') meter(radarNorm(c.entidad), c.entidad, c);
+    else if (vista === 'regiones') meter(c.departamento || 'sin departamento', c.departamento || 'Sin departamento', c);
+    else c.coincidencias.forEach(t => meter(t, t, c));
+  });
+  return [...grupos.values()].map(g => {
+    const valores = g.contratos.map(c => c.valor || 0);
+    // El nombre mas usado: un mismo proveedor puede estar escrito de varias formas.
+    const nombre = vista === 'ganadores' ? (mTop(g.contratos, 'proveedor', 1)[0] || [g.nombre])[0] : g.nombre;
+    return { ...g, nombre, n: g.contratos.length, total: valores.reduce((a, b) => a + b, 0), mediana: mMediana(valores), valores };
+  });
+}
+function filaMer(g, vista) {
+  const li = el('li', 'card');
+  const sc = el('div', 'score'); sc.append(el('b', '', String(g.n)), el('small', '', g.n === 1 ? 'contrato' : 'contratos'));
+  const body = el('div');
+  const cabeza = el('div', 'cabeza'); const valor = el('div', 'valor');
+  valor.append(el('strong', '', pesos(g.total)), el('small', '', g.mediana ? `Valor típico ${pesos(g.mediana)}` : 'Sin valores publicados'));
+  cabeza.append(el('h2', '', vista === 'productos' ? g.nombre.charAt(0).toUpperCase() + g.nombre.slice(1) : g.nombre), valor);
+  body.append(cabeza);
+  const lineas = [];
+  const ents = new Set(g.contratos.map(c => c.entidad)), deps = new Set(g.contratos.map(c => c.departamento).filter(Boolean)), provs = new Set(g.contratos.map(c => c.nit || radarNorm(c.proveedor)));
+  if (vista === 'ganadores') {
+    if (g.contratos[0].nit) lineas.push(['NIT', g.contratos[0].nit]);
+    lineas.push(['Le vende a', `${plural(ents.size, 'entidad', 'entidades')}: ${mTop(g.contratos, 'entidad', 3).map(([n, k]) => `${n} (${k})`).join(', ')}${ents.size > 3 ? '…' : ''}`]);
+    lineas.push(['Departamentos', [...deps].slice(0, 5).join(', ') + (deps.size > 5 ? '…' : '')]);
+    lineas.push(['Productos', mTop(g.contratos.flatMap(c => c.coincidencias.map(t => ({ t }))), 't', 4).map(([n]) => n).join(', ')]);
+  } else if (vista === 'entidades') {
+    lineas.push(['Departamento', [...deps].join(', ') || '—']);
+    lineas.push(['Le compra a', `${plural(provs.size, 'proveedor', 'proveedores')}: ${mTop(g.contratos, 'proveedor', 3).map(([n, k]) => `${n} (${k})`).join(', ')}${provs.size > 3 ? '…' : ''}`]);
+  } else if (vista === 'regiones') {
+    const lider = mTop(g.contratos, 'proveedor', 1)[0];
+    lineas.push(['Quién ganó', `${plural(provs.size, 'proveedor distinto', 'proveedores distintos')} en ${plural(g.n, 'contrato', 'contratos')}${lider ? `. Más contratos: ${lider[0]} (${lider[1]})` : ''}`]);
+    lineas.push(['Entidades que compran', String(ents.size)]);
+  } else {
+    lineas.push(['Rango habitual', g.mediana ? `${pesos(mCuartil(g.valores, 0.25))} a ${pesos(mCuartil(g.valores, 0.75))} (la mitad de los contratos queda en ese rango)` : 'sin valores']);
+    lineas.push(['Más contratos', mTop(g.contratos, 'proveedor', 3).map(([n, k]) => `${n} (${k})`).join(', ')]);
+    lineas.push(['Compran', `${plural(ents.size, 'entidad', 'entidades')} en ${plural(deps.size, 'departamento', 'departamentos')}`]);
+  }
+  const nAct = g.contratos.filter(c => estadoContrato(c).id === 'act').length;
+  if (mer && mer.competencia && vista !== 'ganadores') {
+    const clave = vista === 'entidades' ? radarNorm(g.nombre) : vista === 'regiones' ? radarNorm(g.nombre) : g.nombre;
+    const c = (mer.competencia[vista] || {})[clave];
+    if (c) lineas.push(['Competencia', textoCompetencia(c) + ', últimos 12 meses']);
+  }
+  lineas.push(['Estado', `${plural(nAct, 'activo', 'activos')} y ${plural(g.n - nAct, 'finalizado', 'finalizados')}`]);
+  lineas.forEach(([k, v]) => { const p = el('p', 'hist'); p.append(el('b', '', k + ': '), document.createTextNode(v)); body.append(p); });
+  const det = el('details', 'req'); const sum = el('summary', '', `Ver contratos (${g.n})`); det.append(sum);
+  const cuerpo = el('div', 'cuerpo'); const ul = el('ul');
+  g.contratos.slice().sort((a, b) => (b.valor || 0) - (a.valor || 0)).slice(0, 8).forEach(c => {
+    const l = el('li'); l.append(el('b', '', estadoContrato(c).texto + ' · '), document.createTextNode(`${c.entidad} · ${pesos(c.valor)} · ${vista === 'ganadores' ? '' : (c.proveedor || 'proveedor no publicado') + ' · '}${(c.objeto || '').slice(0, 110)}${(c.objeto || '').length > 110 ? '…' : ''} `));
+    if (c.url) { const a = el('a', 'go'); a.href = c.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = 'SECOP'; l.append(a); }
+    ul.append(l);
+  });
+  cuerpo.append(ul); if (g.n > 8) cuerpo.append(el('p', 'nota', `Se muestran los 8 de mayor valor, de ${g.n}.`));
+  det.append(cuerpo); body.append(det);
+  li.append(sc, body); return li;
+}
+function pintarMer() {
+  const lista = $('mlista');
+  $('mseg').replaceChildren(...MER_VISTAS.map(([id, texto]) => {
+    const b = el('button', '', texto); b.type = 'button'; b.setAttribute('aria-pressed', String(merVer === id));
+    b.onclick = () => { merVer = id; merVistos = PAGINA; pintarMer(); }; return b;
+  }));
+  if (!mer) return;
+  if (mer.error) { lista.replaceChildren(estadoVacio('No se pudo cargar', 'Revise la conexión e intente de nuevo.', cargarMer)); $('mcuenta').textContent = ''; return; }
+  const e = mer.estado;
+  if (!e.listo) {
+    $('mcuenta').textContent = '';
+    lista.replaceChildren(e.error ? estadoVacio('No se pudo consultar SECOP', e.error + ' Vuelva a abrir esta pestaña en unos minutos.')
+      : estadoVacio('Consultando contratos en SECOP…', 'La primera vez tarda un par de minutos. Esta pantalla se actualiza sola.'));
+    return;
+  }
+  const q = radarNorm($('mq').value), dep = $('mdep').value, prod = $('mprod').value, orden = $('morden').value, est = $('mestado').value;
+  const f = mer.contratos.filter(c => (!dep || c.departamento === dep) && (!est || estadoContrato(c).id === est) && (!prod || c.coincidencias.includes(prod)) &&
+    (!q || radarNorm(c.proveedor + ' ' + c.entidad + ' ' + c.objeto).includes(q)));
+  const grupos = agruparMer(f, merVer).sort(orden === 'total_asc'
+    // De menor a mayor, dejando al final los que no publican ningun valor.
+    ? (a, b) => (a.total === 0) - (b.total === 0) || (a.total - b.total) || (b.n - a.n)
+    : (a, b) => (b[orden] - a[orden]) || (b.total - a.total));
+  const nombres = { ganadores: 'proveedores', entidades: 'entidades', regiones: 'departamentos', productos: 'productos' };
+  $('mcuenta').textContent = `${grupos.length.toLocaleString('es-CO')} ${nombres[merVer]} · ${f.length.toLocaleString('es-CO')} contratos${e.calculando ? ' · actualizando datos…' : ` · datos de ${e.generado}`}${merVer === 'productos' ? ' · un contrato con varios productos cuenta en cada uno' : ''}`;
+  if (!grupos.length) { lista.replaceChildren(estadoVacio('Sin resultados con estos filtros', 'Quite algún filtro para ver más.')); return; }
+  const filas = grupos.slice(0, merVistos).map(g => filaMer(g, merVer));
+  if (grupos.length > merVistos) {
+    const li = el('li', 'mas'); const b = el('button', 'btn ghost', `Mostrar ${Math.min(PAGINA, grupos.length - merVistos)} más (quedan ${(grupos.length - merVistos).toLocaleString('es-CO')})`);
+    b.type = 'button'; b.onclick = () => { merVistos += PAGINA; pintarMer(); }; li.append(b); filas.push(li);
+  }
+  lista.replaceChildren(...filas);
+}
+['mq', 'mdep', 'mprod', 'mestado', 'morden'].forEach(id => $(id).addEventListener('input', () => { merVistos = PAGINA; pintarMer(); }));
+
+const TABS = ['radar', 'revisar', 'venc', 'mer', 'docs', 'crit'];
+function vista(nombre) {
+  if (nombre === 'documentos') nombre = 'docs';
+  if (!TABS.includes(nombre)) nombre = 'radar';
+  const esRadar = ['radar', 'revisar'].includes(nombre);
+  $('vista-radar').hidden = !esRadar; $('vista-docs').hidden = nombre !== 'docs'; $('vista-venc').hidden = nombre !== 'venc'; $('vista-mer').hidden = nombre !== 'mer'; $('vista-crit').hidden = nombre !== 'crit';
+  $('ctlRadar').hidden = !esRadar;
+  TABS.forEach(t => { const b = $('tab-' + t); b.setAttribute('aria-selected', String(t === nombre)); b.tabIndex = t === nombre ? 0 : -1; });
+  if (esRadar) {
+    if (modo !== nombre) { mostrados = PAGINA; animar = true; }
+    modo = nombre;
+    if (alertasViejas) { alertasViejas = false; cargar(); } else if (datos) { pintarKpis(); pintar(); }
+  }
+  if (nombre === 'venc') cargarVenc();
+  if (nombre === 'mer') cargarMer();
+  if (nombre === 'docs' && !docs) cargarDocs();
+  if (nombre === 'crit') cargarCrit();
+  $('tab-' + nombre).scrollIntoView({ inline: 'center', block: 'nearest' });
+  history.replaceState(null, '', '#' + nombre);
+}
+TABS.forEach(t => $('tab-' + t).onclick = () => vista(t));
+
+// Mensaje flotante con la explicacion de cada seccion: aparece al pasar el cursor o al enfocar la pestaña.
+const AYUDA = {
+  radar: ['Radar', ['Las licitaciones abiertas hoy en SECOP II que más se parecen a lo que Electroriente vende, de la más a la menos factible. Es la lista para trabajar primero.',
+    'Cada tarjeta explica por qué salió, cuánto vale, cuándo cierra si SECOP lo publica, cuánta competencia suele haber y qué ha contratado antes esa entidad. Decida con «Me interesa» o «Descartar».']],
+  revisar: ['Por revisar', ['Procesos con señales más débiles: no llegan al puntaje para avisarle, pero podrían servir.',
+    'Revíselos para decidir si Electroriente puede suministrar o participar con un aliado, y para detectar qué términos faltan en la búsqueda.']],
+  venc: ['Oportunidades futuras', ['Contratos de lo que Electroriente vende que terminan pronto. Ya están adjudicados, así que no se puede ofertar en ellos.',
+    'Sirven para anticiparse: cuando un contrato termina, la entidad suele necesitar lo mismo y puede abrir un proceso nuevo, que aparecería en Radar. Aquí ve quién es el proveedor actual y por cuánto se contrató.']],
+  mer: ['Mercado', ['Quién le vende al Estado lo que Electroriente vende, según los contratos de suministro y compraventa firmados en los últimos 12 meses.',
+    'Vea quién gana, qué entidades compran y a quién, cuánta competencia hay por región y producto, y cuánto se paga. No es todo el gasto del Estado: solo lo que coincide con la búsqueda.']],
+  docs: ['Documentos', document.documentElement.hasAttribute('data-estatico')
+    ? ['Los documentos generales que se piden en toda licitación y cuáles de ellos ya tiene Electroriente: cuáles faltan, cuáles están vigentes y cuáles vencen pronto.',
+       'Aquí solo se ve el estado. Los archivos se suben y se descargan en el panel del computador de la oficina; nunca se publican. Lo que cambia según el proceso se ve en su pliego.']
+    : ['Los documentos generales que se piden en toda licitación. Suba aquí los de Electroriente y vea cuáles faltan, cuáles están vigentes y cuáles vencen pronto.',
+       'Los archivos se guardan solo en este computador (carpeta docs/empresa), nunca en GitHub; a la web compartida solo llega el estado de cada documento. Lo que cambia según el proceso se ve en su pliego.']],
+  crit: ['Criterios', ['Cómo decide el radar si una licitación vale la pena: los criterios, su peso y los términos de búsqueda, con las veces que acertó cada uno.',
+    'Sirve para revisar y ajustar la búsqueda.']]
+};
+(function () {
+  const caja = $('ayuda'); let espera = null;
+  const ocultar = () => { clearTimeout(espera); caja.classList.remove('visible'); };
+  function mostrar(tab, id) {
+    const [titulo, parrafos] = AYUDA[id];
+    caja.replaceChildren(el('b', '', titulo), ...parrafos.map(t => el('p', '', t)));
+    const r = tab.getBoundingClientRect();
+    caja.style.left = Math.max(12, Math.min(r.left, innerWidth - caja.offsetWidth - 12)) + 'px';
+    caja.style.top = (r.bottom + 8) + 'px';
+    caja.classList.add('visible');
+  }
+  TABS.forEach(id => {
+    const tab = $('tab-' + id);
+    tab.setAttribute('aria-describedby', 'ayuda');
+    tab.addEventListener('mouseenter', () => { if (!matchMedia('(hover: hover)').matches) return; clearTimeout(espera); espera = setTimeout(() => mostrar(tab, id), 180); });
+    tab.addEventListener('mouseleave', ocultar);
+    tab.addEventListener('focus', () => { if (tab.matches(':focus-visible')) mostrar(tab, id); });
+    tab.addEventListener('blur', ocultar);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') ocultar(); });
+  window.addEventListener('scroll', ocultar, { passive: true });
+  // En pantallas táctiles no existe el cursor: la explicación se muestra al tocar la sección
+  // por primera vez y se cierra sola o al tocar en cualquier otro lado.
+  if (matchMedia('(hover: none)').matches) {
+    let vistas = {};
+    try { vistas = JSON.parse(localStorage.getItem('ayudaVista') || '{}'); } catch (_) {}
+    TABS.forEach(id => $('tab-' + id).addEventListener('click', () => {
+      if (vistas[id]) return;
+      vistas[id] = 1;
+      try { localStorage.setItem('ayudaVista', JSON.stringify(vistas)); } catch (_) {}
+      mostrar($('tab-' + id), id);
+      clearTimeout(espera); espera = setTimeout(ocultar, 9000);
+    }));
+    document.addEventListener('pointerdown', ocultar, true);
+  }
+})();
+// Sin teclado físico no hay atajo "/": el texto de ayuda sobra.
+if (matchMedia('(pointer: coarse)').matches) $('q').placeholder = 'Entidad, objeto o término';
+// Flechas, Inicio y Fin recorren las pestañas; "/" lleva al buscador.
+$('tablist').addEventListener('keydown', e => {
+  const visibles = TABS.filter(t => !$('tab-' + t).hidden);   // en la web compartida algunas pestañas no existen
+  const i = visibles.findIndex(t => $('tab-' + t) === document.activeElement);
+  if (i < 0) return;
+  const paso = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+  const j = e.key === 'Home' ? 0 : e.key === 'End' ? visibles.length - 1 : paso === undefined ? -1 : (i + paso + visibles.length) % visibles.length;
+  if (j < 0) return;
+  e.preventDefault(); vista(visibles[j]); $('tab-' + visibles[j]).focus();
+});
+document.addEventListener('keydown', e => {
+  if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || $('ctlRadar').hidden) return;
+  if (/^(input|select|textarea)$/i.test(document.activeElement.tagName)) return;
+  e.preventDefault(); $('q').focus();
+});
+['soloFaltan'].forEach(id => $(id).addEventListener('input', pintarDocs));
+
+$('orden').addEventListener('change', () => { orden = $('orden').value; mostrados = PAGINA; animar = true; pintar(); });
+$('actualizar').onclick = () => cargar(true, true);
+$('dias').onchange = () => cargar();
+// Encabezado fijo: se condensa al bajar (con histeresis para que no parpadee) y publica su alto para los demas elementos fijos.
+(function () {
+  const barra = document.querySelector('.barra'); let compacta = false, esperando = false;
+  const ajustar = () => {
+    esperando = false;
+    // Al condensarse, el encabezado deja su hueco en el flujo (margen igual a lo que se encoge): asi el contenido no se
+    // mueve ni el navegador corrige la posicion del scroll, que haria parpadear el cambio.
+    if (!compacta && scrollY > 80) {
+      const antes = barra.offsetHeight; compacta = true; barra.classList.add('compacta');
+      barra.style.marginBottom = Math.max(0, antes - barra.offsetHeight) + 'px';
+    } else if (compacta && scrollY < 20) {
+      compacta = false; barra.classList.remove('compacta'); barra.style.marginBottom = '';
+    }
+  };
+  addEventListener('scroll', () => { if (!esperando) { esperando = true; requestAnimationFrame(ajustar); } }, { passive: true });
+  const tabs = document.getElementById('tablist');
+  const medir = () => {
+    document.documentElement.style.setProperty('--alto-barra', barra.offsetHeight + 'px');
+    document.documentElement.style.setProperty('--alto-tabs', tabs.offsetHeight + 'px');
+  };
+  if ('ResizeObserver' in window) { const ro = new ResizeObserver(medir); ro.observe(barra); ro.observe(tabs); } else medir();
+  ajustar();
+})();
+// Filtros: buscar y departamento siempre a la vista; el resto en «Más filtros», con la cuenta de los activos.
+function sincronizarFiltros(abrir) {
+  const dentro = ['renov', 'novedad', 'equipo'].filter(id => $(id).value && !$(id).closest('label').hidden);
+  const n = dentro.length, panel = $('mas-filtros');
+  $('cuenta-filtros').hidden = !n; $('cuenta-filtros').textContent = n;
+  $('btn-mas').setAttribute('aria-label', 'Más filtros' + (n ? `, ${n} activo${n > 1 ? 's' : ''}` : ''));
+  if (abrir && n) panel.hidden = false;
+  $('btn-mas').setAttribute('aria-expanded', String(!panel.hidden));
+  $('limpiar').hidden = !(n || $('q').value || $('dep').value);
+}
+$('btn-mas').onclick = () => { $('mas-filtros').hidden = !$('mas-filtros').hidden; sincronizarFiltros(false); };
+$('limpiar').onclick = () => { ['q', 'dep', 'renov', 'novedad', 'equipo'].forEach(id => { $(id).value = ''; }); mostrados = PAGINA; sincronizarFiltros(false); pintar(); $('q').focus(); };
+['q', 'dep', 'renov', 'novedad', 'equipo'].forEach(id => $(id).addEventListener('input', () => { mostrados = PAGINA; sincronizarFiltros(false); pintar(); }));
+cargar();
+vista(location.hash.slice(1) || 'radar');
+iniciarHoja();
+</script>
+</body>
+</html>
